@@ -68,7 +68,7 @@ function compile
 	echo -e "#purpose of the file: to compile $OUTPUT
 #date: ${now}
 #-------------------------------------------------
-g++ -o compile_$OUTPUT $@ && ./$OUTPUT" > "compile_$OUTPUT.sh"
+g++ -o compile_$OUTPUT $@ && ./compile_$OUTPUT" > "compile_$OUTPUT.sh"
 
 exit 0
 }
@@ -82,6 +82,7 @@ function .h
 #ifndef SDDS_echo ${NAME^^}_H_
 #define SDDS_echo ${NAME^^}_H_
 #include <iostream>
+
 
 
 
