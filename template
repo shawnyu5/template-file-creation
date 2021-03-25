@@ -1,0 +1,148 @@
+#!/bin/bash
+
+#to get the current date
+var=`date +"%FORMAT_STRING"`
+now=`date +"%m_%d_%Y"`
+now=`date +"%Y-%m-%d"`
+
+function bash 
+{
+	echo -e "#!/bin/bash
+#purpose of this file: 
+#Date: ${now} 
+#---------------------------------" > "$NAME.sh"
+	#echo "file $NAME.sh created!"
+
+	if [ "$CODE" = 'true' ]; then 
+		{
+			echo "opening $NAME.sh in vs code"
+			code -n $NAME.sh
+		}
+		else
+		{
+			vim $NAME.sh
+		}
+	fi
+
+	exit 0; 	
+}
+
+function cpp
+{
+	echo -e "//purpose of this file: 
+//Date: ${now}
+//---------------------------------
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+int main ()
+{
+
+
+}" > "$NAME.cpp"
+	#echo "file $NAME.cpp created!"
+
+	if [ "$CODE" = 'true' ]; then 
+		echo "opening $NAME.cpp in VS code"
+		code -n $NAME.cpp
+	else
+		vim $NAME.cpp
+	fi
+
+	exit 0; 
+}
+
+function compile
+{
+	#echo $@
+	if [ "$#" -eq 0 ]; then
+		echo 'please pass in files to compile as arguments'
+		exit 1; 
+	fi
+
+	#ask for the output file name
+	echo 'what will be the output file name'
+	read OUTPUT
+
+	echo -e "#purpose of the file: to compile $OUTPUT
+#date: ${now}
+#-------------------------------------------------
+g++ -o compile_$OUTPUT $@ && ./$OUTPUT" > "compile_$OUTPUT.sh"
+
+exit 0
+}
+
+function .h
+{
+	echo -e "//purpose of this file: 
+//Date: ${now}
+//---------------------------------
+#define _CRT_SECURE_NO_WARNINGS
+#ifndef SDDS_echo ${NAME^^}_H_
+#define SDDS_echo ${NAME^^}_H_
+#include <iostream>
+
+
+
+
+#endif" > "$NAME.h"
+
+	if [ "$CODE" = 'true' ]; then 
+		echo "opening $NAME.cpp in VS code"
+		code -n $NAME.h
+	else
+		vim $NAME.h
+	fi
+
+	exit 0;
+}
+
+function main
+{
+	#flag to determine if code will be opened in vs code or not
+	CODE='false'
+
+	#if -c option is passed in, it will open file in code instead of vim
+	if [ "$1" = '-c' ]; then
+		CODE='true';
+		shift  
+	fi
+
+	#if compile flag is passed in, then create special template for compiling a c++ program
+	if [ "$1" = '-compile' ]; then
+		shift 1
+		compile $@
+	fi
+
+	#it will check if any arguments are passed in. if an arguement no arguement is passed in, it will ask for an arguement. else it will store first arguement in lanuage variable
+	if [ "$#" -eq 0 ]; then
+		echo 'what formate would you like?'
+		read LANUAGE
+	else	
+		LANUAGE=$1
+	fi
+
+	echo 'what will be the name of the file'
+	read NAME
+
+	INPUT='false'
+	while [ "$INPUT" = "false" ]; do
+		
+		if [ "$LANUAGE" = 'cpp' ] || [ "$LANUAGE" = 'bash' ] || [ "$LANUAGE" = '.h' ]; then
+			#echo 'first if condition entered'
+			$LANUAGE #calling a function to create the file
+			INPUT='true' 
+		else
+			echo "$LANUAGE is not a supported formate, supported formates are cpp, bash, .h and compile template"
+
+			echo 'what formate would you like?'
+			read LANUAGE 
+
+			echo 'what will be the name of the file'
+			read NAME
+		fi
+	done
+}
+
+main $@
