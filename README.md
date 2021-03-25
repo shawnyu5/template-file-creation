@@ -3,16 +3,16 @@ this program creates pre determined template files in a varity of programming la
 
 ## installation
 
+1. run this command to download the files nesscessary
 ```
 git clone https://github.com/themagicguy/template-file-creation
 ```
 
-1. run this command to download the files nesscessary
+2. have the ability to run the command globally by adding folder to path. 
 
 ```
 sudo mv template-file-creation /usr/local/bin/
 ```
-2. have the ability to run the command globally by adding folder to path. 
 
 And you are ready to go!!
 
