@@ -1,5 +1,5 @@
 # template-file-creation
-this code creates predetermined template files in a varity of programming lanuages
+this program creates pre determined template files in a varity of programming lanuages
 
 ## installation
 
