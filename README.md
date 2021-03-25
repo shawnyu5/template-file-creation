@@ -37,6 +37,10 @@ the -c option will open a file in vs code instead of vim.
 ```
 template -compile <c++ files>
 ```
-this will create a file that will compile c++ files through g++, and run the file.
+will create a file that will compile c++ files through g++, and run the file.
+```
+template .h
+```
+will create a c++ style header file with header guards 
 
 feel free to add a feature or fix a bug. I'll be happy to accept your PR!
