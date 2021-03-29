@@ -34,6 +34,7 @@ function cpp
 //---------------------------------
 #include <iostream>
 #include <string.h>
+#include <string>
 using namespace std;
 
 int main ()
@@ -68,7 +69,7 @@ function compile
 	echo -e "#purpose of the file: to compile $OUTPUT
 #date: ${now}
 #-------------------------------------------------
-g++ -o compile_$OUTPUT $@ && ./compile_$OUTPUT" > "compile_$OUTPUT.sh"
+g++ -o $OUTPUT $@ && ./compile_$OUTPUT" > "compile_$OUTPUT.sh"
 
 exit 0
 }
@@ -79,8 +80,8 @@ function .h
 //Date: ${now}
 //---------------------------------
 #define _CRT_SECURE_NO_WARNINGS
-#ifndef SDDS_echo ${NAME^^}_H_
-#define SDDS_echo ${NAME^^}_H_
+#ifndef SDDS_${NAME^^}_H_
+#define SDDS_${NAME^^}_H_
 #include <iostream>
 
 
@@ -116,16 +117,16 @@ function main
 		compile $@
 	fi
 
-	#it will check if any arguments are passed in. if an arguement no arguement is passed in, it will ask for an arguement. else it will store first arguement in lanuage variable
+	#it will check if any arguments are passed in. if an arguement no arguement is passed in, it will ask for an arguement. else it will store first arguement in name variable
 	if [ "$#" -eq 0 ]; then
-		echo 'what formate would you like?'
-		read LANUAGE
+		echo 'What will be the name of the file'
+		read NAME
 	else	
-		LANUAGE=$1
+		NAME=$1
 	fi
 
-	echo 'what will be the name of the file'
-	read NAME
+	echo 'what will be the format of the file? (cpp, bash, .h)'
+	read LANUAGE
 
 	INPUT='false'
 	while [ "$INPUT" = "false" ]; do
@@ -137,11 +138,12 @@ function main
 		else
 			echo "$LANUAGE is not a supported formate, supported formates are cpp, bash, .h and compile template"
 
-			echo 'what formate would you like?'
-			read LANUAGE 
-
 			echo 'what will be the name of the file'
 			read NAME
+
+			echo 'what format would you like? (cpp, bash, .h)'
+			read LANUAGE 
+
 		fi
 	done
 }
