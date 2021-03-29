@@ -20,14 +20,13 @@ And you are ready to go!!
 ```
 template
 ```
-by default, when you on the template command on it's own, it will prompt the user for the lanuage, and name of the file. and creates a file with these comments at the top and open the file it just created in vim. 
+by default, when you on the template command on it's own, it will prompt the user for the lanuage, and name of the file. and creates a file with these comments at the top, and open the file it just created in vim. 
 ```
 purpose of this file:
 
 Date: <current date>
 
 ---------------------------------
-```
 
 ```
 template -c
