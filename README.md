@@ -1,9 +1,9 @@
 # template-file-creation
-this program creates pre determined template files in a varity of programming lanuages
+this program creates pre determined template files in a variety of programming languages
 
 ## installation
 
-1. run this command to download the files nesscessary
+1. run this command to download the necessary files
 ```
 git clone https://github.com/themagicguy/template-file-creation
 ```
@@ -20,26 +20,32 @@ And you are ready to go!!
 ```
 template
 ```
-by default, when you on the template command on it's own, it will prompt the user for the lanuage, and name of the file. and creates a file with these comments at the top, and open the file it just created in vim. 
-```
+by default, when you on the template command on it's own, it will prompt the user for the language, and name of the file. and creates a file with these comments at the top, and open the file it just created in vim. 
+```text
 purpose of this file:
 
 Date: <current date>
 
 ---------------------------------
-
-```
-template -c
 ```
 the -c option will open a file in vs code instead of vim. 
 
+```bash
+template -c
 ```
+
+will create a file that will compile c++ files through g++, and run the file.
+​```bash
 template -compile <c++ files>
 ```
-will create a file that will compile c++ files through g++, and run the file.
-```
+
+
+```bash
 template .h
 ```
 will create a c++ style header file with header guards 
 
-feel free to add a feature or fix a bug. I'll be happy to accept your PR!
+```bash
+template <FILE_NAME>
+```
+running the command with the file name passed in will prompt the user for a lanuage, then create a file with that name and selected lanuage. 
