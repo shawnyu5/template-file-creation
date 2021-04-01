@@ -53,6 +53,25 @@ int main ()
 
 	exit 0; 
 }
+function html
+{
+	echo -e "<!--//purpose of this file: 
+//Date: ${now}
+//--------------------------------- -->
+
+
+" > "$NAME.html"
+
+	if [ "$CODE" = 'true' ]; then 
+		echo "opening $NAME.cpp in VS code"
+		code -n $NAME.html
+	else
+		vim $NAME.html
+	fi
+
+	exit 0;
+}
+
 
 function compile
 {
@@ -69,7 +88,7 @@ function compile
 	echo -e "#purpose of the file: to compile $OUTPUT
 #date: ${now}
 #-------------------------------------------------
-g++ -o $OUTPUT $@ && ./compile_$OUTPUT" > "compile_$OUTPUT.sh"
+g++ -o $OUTPUT $@ && ./$OUTPUT" > "compile_$OUTPUT.sh"
 
 exit 0
 }
@@ -125,18 +144,18 @@ function main
 		NAME=$1
 	fi
 
-	echo 'what will be the format of the file? (cpp, bash, .h)'
+	echo 'what will be the format of the file? (cpp, bash, .h, html)'
 	read LANUAGE
 
 	INPUT='false'
 	while [ "$INPUT" = "false" ]; do
 		
-		if [ "$LANUAGE" = 'cpp' ] || [ "$LANUAGE" = 'bash' ] || [ "$LANUAGE" = '.h' ]; then
+		if [ "$LANUAGE" = 'cpp' ] || [ "$LANUAGE" = 'bash' ] || [ "$LANUAGE" = '.h' ] || [ "$LANUAGE" = 'html' ]; then
 			#echo 'first if condition entered'
 			$LANUAGE #calling a function to create the file
 			INPUT='true' 
 		else
-			echo "$LANUAGE is not a supported formate, supported formates are cpp, bash, .h and compile template"
+			echo "$LANUAGE is not a supported formate, supported formates are cpp, bash, .h, html and compile template"
 
 			echo 'what will be the name of the file'
 			read NAME
