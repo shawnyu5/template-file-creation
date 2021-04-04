@@ -29,9 +29,14 @@ Date: <current date>
 ---------------------------------
 ```
 
-the -c option will open a file in vs code instead of vim. 
+the -c option will open the file in a existing vs code window instead of vim. 
 ```bash
 template -c
+```
+
+-cn will will open the file in a new vs code window
+```bash
+template -cn
 ```
 
 will create a file that will compile c++ files through g++, and run the file.
