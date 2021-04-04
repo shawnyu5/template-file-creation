@@ -39,7 +39,7 @@ template -c
 template -cn
 ```
 
-will create a file that will compile c++ files through g++, and run the file.
+will create a file that will compile c++ files through g++, and run the program.
 ```bash
 template -compile <c++ files>
 ```
