@@ -4,13 +4,16 @@ this program creates pre determined template files in a variety of programming l
 ## installation
 
 1. run this command to download the files necessary
-```
+```bash
 git clone https://github.com/themagicguy/template-file-creation
 ```
-
-2. have the ability to run the command globally by adding folder to path. 
-
+2. unzip folder
+```bash
+unzip template-file-creation
 ```
+
+3. have the ability to run the command globally by adding folder to path. 
+``` bash
 sudo mv template-file-creation /usr/local/bin/
 ```
 
