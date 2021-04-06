@@ -7,10 +7,6 @@ this program creates pre determined template files in a variety of programming l
 ```bash
 git clone https://github.com/themagicguy/template-file-creation
 ```
-2. unzip folder
-```bash
-unzip template-file-creation
-```
 
 3. have the ability to run the command globally by adding folder to path. 
 ``` bash
