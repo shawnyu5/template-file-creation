@@ -50,7 +50,7 @@ int main ()
 	#echo "file $NAME.cpp created!"
 
 	if [ "$CODE" = 'new' ]; then 
-		echo "opening $NAME.cpp in VS code"
+		echo "opening $NAME.cpp in new VS code window"
 		code -n $NAME.cpp
 	elif [ "$CODE" = 'true' ]; then
 		echo "opening $NAME.cpp in VS code"
@@ -141,6 +141,12 @@ using namespace std;
 	exit 0;
 }
 
+function readme
+{
+	vim README.md
+	exit 0; 
+}
+
 function main
 {
 	#flag to determine if code will be opened in vs code or not
@@ -161,7 +167,13 @@ function main
 		compile $@
 	fi
 
-	#it will check if any arguments are passed in. if an arguement no arguement is passed in, it will ask for an arguement. else it will store first arguement in name variable
+	#if read flag is passed in, it will create a README.md file
+	if [ "$1" = '-readme' ]; then
+		readme
+		exit 0; 
+	fi
+
+	#if no arguements are passed in, it will ask for an arguement. else it will store first arguement in name variable
 	if [ "$#" -eq 0 ]; then
 		echo 'What will be the name of the file'
 		read NAME
@@ -169,23 +181,22 @@ function main
 		NAME=$1
 	fi
 
-	echo 'what will be the format of the file? (cpp, bash, .h, html)'
+	echo 'what will be the format of the file? (cpp, bash, .h, html, read(REAMDE.md) and compile template)'
 	read LANUAGE
 
 	INPUT='false'
 	while [ "$INPUT" = "false" ]; do
 		
-		if [ "$LANUAGE" = 'cpp' ] || [ "$LANUAGE" = 'bash' ] || [ "$LANUAGE" = '.h' ] || [ "$LANUAGE" = 'html' ]; then
+		if [ "$LANUAGE" = 'cpp' ] || [ "$LANUAGE" = 'bash' ] || [ "$LANUAGE" = '.h' ] || [ "$LANUAGE" = 'html' ] || [ "$LANUAGE" = 'readme' ]; then
 			#echo 'first if condition entered'
 			$LANUAGE #calling a function to create the file
-			INPUT='true' 
 		else
-			echo "$LANUAGE is not a supported formate, supported formates are cpp, bash, .h, html and compile template"
+			echo "$LANUAGE is not a supported formate, supported formates are cpp, bash, .h, html, readme(REAMDE.md) and compile template"
 
 			echo 'what will be the name of the file'
 			read NAME
 
-			echo 'what format would you like? (cpp, bash, .h)'
+			echo 'what format would you like? (cpp, bash, .h, html, readme(REAMDE.md) and compile template)'
 			read LANUAGE 
 
 		fi
