@@ -193,7 +193,6 @@ function main
 
 	echo 'what will be the format of the file? (cpp, bash, .h, html, read(REAMDE.md) and compile template)'
 	read LANUAGE
-	echo "lanuage is $LANUAGE"
 	INPUT='false'
 	while [ "$INPUT" = "false" ]; do
 		
