@@ -47,3 +47,9 @@ running the command with the file name passed in will then prompt the user for t
 ```bash
 template <NEW_FILE_NAME>
 ```
+
+passing in **read** or **readme** as either a argument or as an language will automatically create a README.md file and disregard the name passed in. 
+```bash
+template read
+template readme
+```
