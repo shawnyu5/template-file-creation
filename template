@@ -191,24 +191,24 @@ function main
 		NAME=$1
 	fi
 
-	echo 'what will be the format of the file? (cpp, bash, .h, html, read(REAMDE.md) and compile template)'
+	echo 'what will be the format of the file? (cpp, sh, .h, html, read(REAMDE.md) and compile template)'
 	read LANUAGE
 	INPUT='false'
 	while [ "$INPUT" = "false" ]; do
 		
 		case "$LANUAGE" in 
 			'cpp') cpp;;
-			'bash') bash;;
+			'sh') bash;;
 			'.h') .h;;
 			'readme') readme;;
 			'read') readme;;
 			'html') html;;
-			*) echo "***$LANUAGE*** is not a supported formate, supported formates are cpp, bash, .h, html, read(README.md) and compile template"
+			*) echo "***$LANUAGE*** is not a supported formate, supported formats are cpp, sh, .h, html, read(README.md) and compile template"
 
 			echo 'what will be the name of the file'
 			read NAME
 
-			echo 'what format would you like? (cpp, bash, .h, html, read(REAMDE.md) and compile template)'
+			echo 'what format would you like? (cpp, sh, .h, html, read(REAMDE.md) and compile template)'
 			read LANUAGE;;  
 		esac
 
