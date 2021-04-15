@@ -211,20 +211,6 @@ function main
 			echo 'what format would you like? (cpp, sh, .h, html, read(REAMDE.md) and compile template)'
 			read LANUAGE;;  
 		esac
-
-		# if [ "$LANUAGE" = 'cpp' ] || [ "$LANUAGE" = 'bash' ] || [ "$LANUAGE" = '.h' ] || [ "$LANUAGE" = 'html' ] || [ "$LANUAGE" = 'readme' ]; then
-		# 	#echo 'first if condition entered'
-		# 	$LANUAGE #calling a function to create the file
-		# else
-		# 	echo "$LANUAGE is not a supported formate, supported formates are cpp, bash, .h, html, readme(REAMDE.md) and compile template"
-
-		# 	echo 'what will be the name of the file'
-		# 	read NAME
-
-		# 	echo 'what format would you like? (cpp, bash, .h, html, readme(REAMDE.md) and compile template)'
-		# 	read LANUAGE 
-
-		# fi
 	done
 }
 
