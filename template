@@ -22,8 +22,8 @@ function bash
 		echo "opening $NAME.sh in new VS code window"
 		code -n $NAME.sh
 	elif [ "$CODE" = 'true' ]; then
-		echo "opening $NAME.h in VS code"
-		code $NAME.h
+		echo "opening $NAME.sh in VS code"
+		code $NAME.sh
 	else
 		vim $NAME.sh
 	fi
@@ -183,7 +183,7 @@ function main
 		exit 0; 
 	fi
 
-	#if no arguements are passed in, it will ask for an argument. else it will store first arguement in name variable
+	#if no arguments are passed in, it will ask for an argument. else it will store first arguement in name variable
 	if [ "$#" -eq 0 ]; then
 		echo 'What will be the name of the file'
 		read NAME
@@ -193,7 +193,7 @@ function main
 
 	echo 'what will be the format of the file? (cpp, bash, .h, html, read(REAMDE.md) and compile template)'
 	read LANUAGE
-
+	echo "lanuage is $LANUAGE"
 	INPUT='false'
 	while [ "$INPUT" = "false" ]; do
 		
@@ -212,6 +212,20 @@ function main
 			echo 'what format would you like? (cpp, bash, .h, html, read(REAMDE.md) and compile template)'
 			read LANUAGE;;  
 		esac
+
+		# if [ "$LANUAGE" = 'cpp' ] || [ "$LANUAGE" = 'bash' ] || [ "$LANUAGE" = '.h' ] || [ "$LANUAGE" = 'html' ] || [ "$LANUAGE" = 'readme' ]; then
+		# 	#echo 'first if condition entered'
+		# 	$LANUAGE #calling a function to create the file
+		# else
+		# 	echo "$LANUAGE is not a supported formate, supported formates are cpp, bash, .h, html, readme(REAMDE.md) and compile template"
+
+		# 	echo 'what will be the name of the file'
+		# 	read NAME
+
+		# 	echo 'what format would you like? (cpp, bash, .h, html, readme(REAMDE.md) and compile template)'
+		# 	read LANUAGE 
+
+		# fi
 	done
 }
 
