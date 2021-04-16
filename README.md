@@ -40,12 +40,12 @@ template -cn
 
 will create a file that will compile c++ files through g++, and run the program.
 ```bash
-template -compile <c++ files>
+template -compile c++_files
 ```
 
 running the command with the file name passed in will then prompt the user for the format of the file and create a file with that name. 
 ```bash
-template <NEW_FILE_NAME>
+template NEW_FILE_NAME
 ```
 
 passing in **read** or **readme** as either a argument or as an language will automatically create a README.md file and disregard the name passed in. 
