@@ -11,7 +11,8 @@ git clone https://github.com/themagicguy/template-file-creation
 2. have the ability to run the command globally by adding folder to path. 
 
 ```
-sudo mv template-file-creation /usr/local/bin/
+chmod +x template-file-creation/template
+sudo cp template-file-creation/template /usr/local/bin/
 ```
 
 And you are ready to go!!
