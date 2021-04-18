@@ -10,18 +10,23 @@ function bash
 	echo -e "#!/bin/bash
 #purpose of this file: 
 #Date: ${now} 
-#---------------------------------" > "$NAME.sh"
+#---------------------------------
+
+
+
+
+" > "$NAME.sh"
+	chmod +x $NAME.sh
 	#echo "file $NAME.sh created!"
 
-	if [ "$CODE" = 'true' ]; then 
-		{
-			echo "opening $NAME.sh in vs code"
-			code -n $NAME.sh
-		}
-		else
-		{
-			vim $NAME.sh
-		}
+	if [ "$CODE" = 'new' ]; then 
+		echo "opening $NAME.sh in new VS code window"
+		code -n $NAME.sh
+	elif [ "$CODE" = 'true' ]; then
+		echo "opening $NAME.sh in VS code"
+		code $NAME.sh
+	else
+		vim $NAME.sh
 	fi
 
 	exit 0; 	
@@ -40,13 +45,18 @@ using namespace std;
 int main ()
 {
 
+}
 
-}" > "$NAME.cpp"
+" > "$NAME.cpp"
+	chmod +x $NAME.sh
 	#echo "file $NAME.cpp created!"
 
-	if [ "$CODE" = 'true' ]; then 
-		echo "opening $NAME.cpp in VS code"
+	if [ "$CODE" = 'new' ]; then 
+		echo "opening $NAME.cpp in new VS code window"
 		code -n $NAME.cpp
+	elif [ "$CODE" = 'true' ]; then
+		echo "opening $NAME.cpp in VS code"
+		code $NAME.cpp
 	else
 		vim $NAME.cpp
 	fi
@@ -58,13 +68,22 @@ function html
 	echo -e "<!--//purpose of this file: 
 //Date: ${now}
 //--------------------------------- -->
+<html>
 
+
+
+
+</html>
 
 " > "$NAME.html"
 
-	if [ "$CODE" = 'true' ]; then 
-		echo "opening $NAME.cpp in VS code"
+
+	if [ "$CODE" = 'new' ]; then 
+		echo "opening $NAME.cpp in new VS code window"
 		code -n $NAME.html
+	elif [ "$CODE" = 'true' ]; then
+		echo "opening $NAME.h in VS code"
+		code $NAME.html
 	else
 		vim $NAME.html
 	fi
@@ -90,6 +109,8 @@ function compile
 #-------------------------------------------------
 g++ -o $OUTPUT $@ && ./$OUTPUT" > "compile_$OUTPUT.sh"
 
+	chmod +x "compile_$OUTPUT.sh"
+
 exit 0
 }
 
@@ -102,16 +123,23 @@ function .h
 #ifndef SDDS_${NAME^^}_H_
 #define SDDS_${NAME^^}_H_
 #include <iostream>
+using namespace std; 
+
+
 
 
 
 
 
 #endif" > "$NAME.h"
+	chmod +x "$NAME.h"
 
-	if [ "$CODE" = 'true' ]; then 
-		echo "opening $NAME.cpp in VS code"
+	if [ "$CODE" = 'new' ]; then 
+		echo "opening $NAME.h in new VS code window"
 		code -n $NAME.h
+	elif [ "$CODE" = 'true' ]; then
+		echo "opening $NAME.h in VS code"
+		code $NAME.h
 	else
 		vim $NAME.h
 	fi
@@ -119,51 +147,76 @@ function .h
 	exit 0;
 }
 
+function readme
+{
+	touch README.md
+	if [ "$CODE" = 'new' ]; then 
+		echo "opening README.md in new VS code window"
+		code -n README.md
+	elif [ "$CODE" = 'true' ]; then
+		echo "opening README.md in VS code"
+		code README.md
+	else
+		vim README.md
+	fi
+
+	exit 0; 
+}
+
 function main
 {
 	#flag to determine if code will be opened in vs code or not
 	CODE='false'
 
-	#if -c option is passed in, it will open file in code instead of vim
-	if [ "$1" = '-c' ]; then
-		CODE='true';
-		shift  
+	#if -c option is passed in, it will open file in code instead of vim and discard flag
+	if [ "$1" = '-cn' ]; then
+		CODE='new';
+		shift 1
+	elif [ "$1" = '-c' ]; then
+		CODE='true'
+		shift 1
 	fi
 
-	#if compile flag is passed in, then create special template for compiling a c++ program
+	#if compile flag is passed in, then create special template for compiling a c++ program and end script
 	if [ "$1" = '-compile' ]; then
 		shift 1
 		compile $@
 	fi
 
-	#it will check if any arguments are passed in. if an arguement no arguement is passed in, it will ask for an arguement. else it will store first arguement in name variable
+	#if read flag is passed in, it will create a README.md file and end script
+	if [ "$1" = 'read' ] || [ "$1" = 'readme' ]; then
+		readme
+		exit 0; 
+	fi
+
+	#if no arguments are passed in, it will ask for an argument. else it will store first arguement in name variable
 	if [ "$#" -eq 0 ]; then
 		echo 'What will be the name of the file'
 		read NAME
-	else	
+	else #or name of the file can be passed in as an argument
 		NAME=$1
 	fi
 
-	echo 'what will be the format of the file? (cpp, bash, .h, html)'
+	echo 'what will be the format of the file? (cpp, sh, .h, html, read(REAMDE.md) and compile template)'
 	read LANUAGE
-
 	INPUT='false'
 	while [ "$INPUT" = "false" ]; do
 		
-		if [ "$LANUAGE" = 'cpp' ] || [ "$LANUAGE" = 'bash' ] || [ "$LANUAGE" = '.h' ] || [ "$LANUAGE" = 'html' ]; then
-			#echo 'first if condition entered'
-			$LANUAGE #calling a function to create the file
-			INPUT='true' 
-		else
-			echo "$LANUAGE is not a supported formate, supported formates are cpp, bash, .h, html and compile template"
+		case "$LANUAGE" in 
+			'cpp') cpp;;
+			'sh') bash;;
+			'.h') .h;;
+			'readme') readme;;
+			'read') readme;;
+			'html') html;;
+			*) echo "***$LANUAGE*** is not a supported formate, supported formats are cpp, sh, .h, html, read(README.md) and compile template"
 
 			echo 'what will be the name of the file'
 			read NAME
 
-			echo 'what format would you like? (cpp, bash, .h)'
-			read LANUAGE 
-
-		fi
+			echo 'what format would you like? (cpp, sh, .h, html, read(REAMDE.md) and compile template)'
+			read LANUAGE;;  
+		esac
 	done
 }
 
