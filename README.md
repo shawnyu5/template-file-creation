@@ -4,13 +4,15 @@ this program creates pre determined template files in a variety of programming l
 ## installation
 
 1. run this command to download the files necessary
-```bash
+```
 git clone https://github.com/themagicguy/template-file-creation
 ```
 
-3. have the ability to run the command globally by adding folder to path. 
-``` bash
-sudo mv template-file-creation /usr/local/bin/
+2. have the ability to run the command globally by adding folder to path. 
+
+```
+chmod +x template-file-creation/template
+sudo cp template-file-creation/template /usr/local/bin/
 ```
 
 And you are ready to go!!
@@ -19,7 +21,7 @@ And you are ready to go!!
 ```
 template
 ```
-by default, when you run the template command on it's own, it will prompt the user for the language, name of the file. And then create a file with these comments at the top, and open the file it just created in vim. 
+by default, when you run the template command on it's own, it will prompt the user for the language, and name of the file. and creates a file with these comments at the top, and open the file it just created in vim. 
 ```
 purpose of this file:
 
@@ -28,28 +30,22 @@ Date: <current date>
 ---------------------------------
 ```
 
-the -c option will open the file in a existing vs code window instead of vim. 
+the -c option will open a file in vs code instead of vim. 
 ```bash
 template -c
 ```
 
-the -cn option will will open the file in a new vs code window
+will create a file that will compile c++ files through g++, and run the file.
 ```bash
-template -cn
+template -compile <c++ files>
 ```
 
-will create a file that will compile c++ files through g++, and run the program.
-```bash
-template -compile c++_files
+will create a c++ style header file with header guards 
+```
+template .h
 ```
 
 running the command with the file name passed in will then prompt the user for the format of the file and create a file with that name. 
 ```bash
-template NEW_FILE_NAME
-```
-
-passing in **read** or **readme** as either a argument or as an language will automatically create a README.md file and disregard the name passed in. 
-```bash
-template read
-template readme
+template <NEW_FILE_NAME>
 ```

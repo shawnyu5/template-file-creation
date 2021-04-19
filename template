@@ -16,6 +16,7 @@ function bash
 
 
 " > "$NAME.sh"
+	chmod +x $NAME.sh
 	#echo "file $NAME.sh created!"
 
 	if [ "$CODE" = 'new' ]; then 
@@ -47,6 +48,7 @@ int main ()
 }
 
 " > "$NAME.cpp"
+	chmod +x $NAME.sh
 	#echo "file $NAME.cpp created!"
 
 	if [ "$CODE" = 'new' ]; then 
@@ -68,18 +70,16 @@ function html
 //--------------------------------- -->
 <html>
 
-
-
-
 </html>
 
 " > "$NAME.html"
 
+
 	if [ "$CODE" = 'new' ]; then 
-		echo "opening $NAME.cpp in new VS code window"
+		echo "opening $NAME.html in new VS code window"
 		code -n $NAME.html
 	elif [ "$CODE" = 'true' ]; then
-		echo "opening $NAME.h in VS code"
+		echo "opening $NAME.html in VS code"
 		code $NAME.html
 	else
 		vim $NAME.html
@@ -106,6 +106,8 @@ function compile
 #-------------------------------------------------
 g++ -o $OUTPUT $@ && ./$OUTPUT" > "compile_$OUTPUT.sh"
 
+	chmod +x "compile_$OUTPUT.sh"
+
 exit 0
 }
 
@@ -121,12 +123,8 @@ function .h
 using namespace std; 
 
 
-
-
-
-
-
 #endif" > "$NAME.h"
+	chmod +x "$NAME.h"
 
 	if [ "$CODE" = 'new' ]; then 
 		echo "opening $NAME.h in new VS code window"
