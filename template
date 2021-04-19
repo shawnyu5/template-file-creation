@@ -70,19 +70,16 @@ function html
 //--------------------------------- -->
 <html>
 
-
-
-
 </html>
 
 " > "$NAME.html"
 
 
 	if [ "$CODE" = 'new' ]; then 
-		echo "opening $NAME.cpp in new VS code window"
+		echo "opening $NAME.html in new VS code window"
 		code -n $NAME.html
 	elif [ "$CODE" = 'true' ]; then
-		echo "opening $NAME.h in VS code"
+		echo "opening $NAME.html in VS code"
 		code $NAME.html
 	else
 		vim $NAME.html
@@ -124,11 +121,6 @@ function .h
 #define SDDS_${NAME^^}_H_
 #include <iostream>
 using namespace std; 
-
-
-
-
-
 
 
 #endif" > "$NAME.h"
