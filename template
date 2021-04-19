@@ -1,10 +1,8 @@
 #!/bin/bash
-
 #to get the current date
 var=`date +"%FORMAT_STRING"`
 now=`date +"%m_%d_%Y"`
 now=`date +"%Y-%m-%d"`
-
 function bash 
 {
 	echo -e "#!/bin/bash
@@ -16,7 +14,6 @@ function bash
 
 
 " > "$NAME.sh"
-	chmod +x $NAME.sh
 	#echo "file $NAME.sh created!"
 
 	if [ "$CODE" = 'new' ]; then 
@@ -28,7 +25,7 @@ function bash
 	else
 		vim $NAME.sh
 	fi
-
+	#chmod +x $NAME.sh
 	exit 0; 	
 }
 
@@ -48,9 +45,7 @@ int main ()
 }
 
 " > "$NAME.cpp"
-	chmod +x $NAME.sh
 	#echo "file $NAME.cpp created!"
-
 	if [ "$CODE" = 'new' ]; then 
 		echo "opening $NAME.cpp in new VS code window"
 		code -n $NAME.cpp
@@ -60,6 +55,7 @@ int main ()
 	else
 		vim $NAME.cpp
 	fi
+	#chmod +x "$NAME.sh"
 
 	exit 0; 
 }
@@ -106,7 +102,7 @@ function compile
 #-------------------------------------------------
 g++ -o $OUTPUT $@ && ./$OUTPUT" > "compile_$OUTPUT.sh"
 
-	chmod +x "compile_$OUTPUT.sh"
+	#chmod +x "compile_$OUTPUT.sh"
 
 exit 0
 }
@@ -195,12 +191,12 @@ function main
 	while [ "$INPUT" = "false" ]; do
 		
 		case "$LANUAGE" in 
-			'cpp') cpp;;
-			'sh') bash;;
-			'.h') .h;;
-			'readme') readme;;
-			'read') readme;;
-			'html') html;;
+			'cpp') cpp ;;
+			'sh') bash ;;
+			'.h') .h ;;
+			'readme') readme ;;
+			'read') readme ;;
+			'html') html ;;
 			*) echo "***$LANUAGE*** is not a supported formate, supported formats are cpp, sh, .h, html, read(README.md) and compile template"
 
 			echo 'what will be the name of the file'
