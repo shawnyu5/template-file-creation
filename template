@@ -61,9 +61,9 @@ int main ()
 }
 function html
 {
-	echo -e "<!--//purpose of this file: 
-//Date: ${now}
-//--------------------------------- -->
+	echo -e "<!--purpose of this file: 
+Date: ${now}
+--------------------------------- -->
 <html>
 
 </html>
