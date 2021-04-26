@@ -21,7 +21,7 @@ And you are ready to go!!
 ```
 template
 ```
-by default, when you run the template command on it's own, it will prompt the user for the language, and name of the file. and creates a file with these comments at the top, and open the file it just created in vim. 
+by default, when you run the template command on it's own, it will prompt the user for the language, and name of the file. and creates a file with these comments at the top, and open the file it just created in vim, as well as give the file excutable permission, where applicable.
 ```
 purpose of this file:
 
