@@ -25,7 +25,7 @@ function bash
 	else
 		vim $NAME.sh
 	fi
-	chmod +x $NAME.sh
+	chmod +x "$NAME.sh"
 	exit 0; 	
 }
 
@@ -55,7 +55,7 @@ int main ()
 	else
 		vim $NAME.cpp
 	fi
-	chmod +x "$NAME.sh"
+	chmod +x "$NAME.cpp"
 
 	exit 0; 
 }
