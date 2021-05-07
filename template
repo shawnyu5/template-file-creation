@@ -89,22 +89,28 @@ function compile
 {
 	#echo $@
 	if [ "$#" -eq 0 ]; then
-		echo 'please pass in files to compile as arguments'
+		echo 'USAGE: template -compile <files to compile.cpp>'
 		exit 1; 
 	fi
 
 	#ask for the output file name
 	echo 'what will be the output file name'
 	read OUTPUT
+	echo "what is the main excutable file?"
+	read MAIN
 
 	echo -e "#purpose of the file: to compile $OUTPUT
 #date: ${now}
 #-------------------------------------------------
-g++ -o $OUTPUT $@ && ./$OUTPUT" > "compile_$OUTPUT.sh"
+output: $OUTPUT.o
+	g++ $@ -o $OUTPUT && ./$OUTPUT
+main.o: $MAIN 
+	g++ -c $MAIN
+clean: 
+	rm *.o $OUTPUT " > "makefile"
+	#chmod +x "compile_$OUTPUT.sh"
 
-	chmod +x "compile_$OUTPUT.sh"
-
-exit 0
+	exit 0
 }
 
 function .h
@@ -116,6 +122,8 @@ function .h
 #ifndef SDDS_${NAME^^}_H_
 #define SDDS_${NAME^^}_H_
 #include <iostream>
+#include <string>
+#include <cstring>
 using namespace std; 
 
 
