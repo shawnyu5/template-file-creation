@@ -97,55 +97,61 @@ function compile
 	echo 'what will be the output file name'
 	read OUTPUT
 	
-	#finding all dependicies in all .cpp files. HAS TO IGNORE .F FILES
-	FILES_FOUND=0
+	#finding all dependicies in all .cpp files. HAS TO IGNORE .h FILES
+	FILES_FOUND=0 # to keep track of number of files found
 	DEPENDENCIES=()
-	for j in $@; do
+	for j in "$@"; do
 		#if .h file detected, ignore file
 		if [[ "$j" == "*.h" ]]; then
 			continue;
 		fi
-		FILES_FOUND=$((FILES_FOUND+1))
 		echo "in forloop"
-		echo current file is $j
-		TMP=$(grep "#include \"" $j | cut -d "\"" -f2 | sed 's/\..*//')
+		echo "current file is $j"
+		#parses through .cpp files individually and finds all #include "". strips everything outside the quotes, leaving only the file name inside the double quote
+		TMP=$(grep '#include "' $j | cut -d "\"" -f2) #| sed 's/\..*//')
+		#| sed -n "${FILES_FOUND}p
 		echo "after parse is $TMP"
 		DEPENDENCIES+=( ${TMP} )
+		echo "DEPENDENCIES are ${DEPENDENCIES[@]}"
+		FILES_FOUND=$((FILES_FOUND+1))
 	done 
 
 	#echo array: ${FILES[0]}
 	#exit
+
 	echo -e "#purpose of the file: to compile $OUTPUT 
 #date: ${now}
 #-------------------------------------------------
 CC=g++
-all: $OUTPUT.o
-	\$(CC) $@ -o $OUTPUT && ./$OUTPUT
-	" > "makefile"
+" > 'makefile'
 
-	#create a target for each .cpp and .h file to increase efficiency and add to makefile
-	echo "found $FILES_FOUND files"
+	printf 'output: ' >> 'makefile'
+	#sets the first output option in the file by appening all files after "output: "
+	for CURRENT in $@; do
+		printf '%s.o ' "$CURRENT" >> 'makefile'
+	done
+
 	for((x=0; x<$FILES_FOUND; x++)); do
 		#need to check if depencies exist by checking if the current array index is empt or not
-		if [[ -z ${DEPENDENCIES[$x]} ]]; then
-			continue
+		if [[ ${#DEPENDENCIES[@]} -eq 0 ]]; then
+			#if no dependicies, exit loop
+			break
 		fi
+		#if dependcies do exist, add to the file
 		echo -e "${DEPENDENCIES[$x]}: 
-	\$(CC) -c ${DEPENDENCIES[$x]}.cpp ${DEPENDENCIES[$x]}.h" >> "makefile"
+	\$(CC) -c ${DEPENDENCIES[$x]} ${DEPENDENCIES[$x]}" >> 'makefile'
+	#do this for the number of dependcies found
 	done
 
 	#finally add clean
 	echo -e "clean: 
 	rm *.o $OUTPUT" >> "makefile" 
 	exit 0
-	#get .cpp files to compile
-	#parse through the files to get the #include "*" to find the .h dependicies
-	#make a target for each .cpp and .h file
 }
 
 function .h
 {
-	echo -e "//purpose of this file: 
+	echo -e "//purpose of this file:
 //Date: ${now}
 //---------------------------------
 #define _CRT_SECURE_NO_WARNINGS
