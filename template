@@ -97,27 +97,22 @@ function compile
 	echo 'what will be the output file name'
 	read OUTPUT
 	
-	#finding all dependicies in all .cpp files. HAS TO IGNORE .h FILES
-	FILES_FOUND=0 # to keep track of number of files found
+	#finding all dependicies in all .cpp files. will ignore all .h files
 	DEPENDENCIES=()
 	for j in "$@"; do
 		#if .h file detected, ignore file
 		if [[ "$j" == "*.h" ]]; then
 			continue;
 		fi
-		echo "in forloop"
+		#echo "in forloop"
 		echo "current file is $j"
-		#parses through .cpp files individually and finds all #include "". strips everything outside the quotes, leaving only the file name inside the double quote
-		TMP=$(grep '#include "' $j | cut -d "\"" -f2) #| sed 's/\..*//')
-		#| sed -n "${FILES_FOUND}p
-		echo "after parse is $TMP"
-		DEPENDENCIES+=( ${TMP} )
-		echo "DEPENDENCIES are ${DEPENDENCIES[@]}"
-		FILES_FOUND=$((FILES_FOUND+1))
-	done 
 
-	#echo array: ${FILES[0]}
-	#exit
+		TMP=$(grep '#include "' $j | cut -d "\"" -f2) #strips everything outside the quotes, leaving only the file name inside the double quotes
+
+		echo "after parse is $TMP"
+		DEPENDENCIES+=( ${TMP} ) #store the file names withthe file extentions in array
+		echo "DEPENDENCIES are ${DEPENDENCIES[@]}"
+	done 
 
 	echo -e "#purpose of the file: to compile $OUTPUT 
 #date: ${now}
@@ -125,21 +120,29 @@ function compile
 CC=g++
 " > 'makefile'
 
-	printf 'output: ' >> 'makefile'
 	#sets the first output option in the file by appening all files after "output: "
+	printf 'output: ' >> 'makefile'
 	for CURRENT in $@; do
-		printf '%s.o ' "$CURRENT" >> 'makefile'
-	done
+		CURRENT=$(echo "$CURRENT" | sed 's/\..*//') #gets rig of file extention.
+		printf '%s.o ' "$CURRENT" >> 'makefile' #adds .o extention to files 
 
-	for((x=0; x<$FILES_FOUND; x++)); do
-		#need to check if depencies exist by checking if the current array index is empt or not
+	done
+	printf "\n"
+	echo -e "\n	\$(CC) $@ -o $OUTPUT && ./$OUTPUT" >> 'makefile' #add g++ <all files> as the default output option
+
+	#loop through the entirety of the array
+	for((x=0; x<${#DEPENDENCIES[@]}; x++)); do
+		#check if any dependicies exist by checking to make sure array size is greater than 0
 		if [[ ${#DEPENDENCIES[@]} -eq 0 ]]; then
 			#if no dependicies, exit loop
 			break
 		fi
-		#if dependcies do exist, add to the file
-		echo -e "${DEPENDENCIES[$x]}: 
-	\$(CC) -c ${DEPENDENCIES[$x]} ${DEPENDENCIES[$x]}" >> 'makefile'
+		#if dependcies do exist, add to the file in the formate:
+		#dependicy.o 
+			#g++ -c dependicy
+		echo -e "$(echo "${DEPENDENCIES[$x]}" | sed 's/\..*/.o/'): ${DEPENDENCIES[$x]} 
+	\$(CC) -c ${DEPENDENCIES[$x]}" >> 'makefile'
+#	echo "DEPENDENCIES x is ${DEPENDENCIES[$x]}"
 	#do this for the number of dependcies found
 	done
 
