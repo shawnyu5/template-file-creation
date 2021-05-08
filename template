@@ -87,7 +87,7 @@ Date: ${now}
 
 function compile
 {
-	#echo $@
+	#check if an arguments were passed in
 	if [ "$#" -eq 0 ]; then
 		echo 'USAGE: template -compile <files to compile.cpp>'
 		exit 1; 
@@ -96,21 +96,51 @@ function compile
 	#ask for the output file name
 	echo 'what will be the output file name'
 	read OUTPUT
-	echo "what is the main excutable file?"
-	read MAIN
+	
+	#finding all dependicies in all .cpp files. HAS TO IGNORE .F FILES
+	FILES_FOUND=0
+	DEPENDENCIES=()
+	for j in $@; do
+		#if .h file detected, ignore file
+		if [[ "$j" == "*.h" ]]; then
+			continue;
+		fi
+		FILES_FOUND=$((FILES_FOUND+1))
+		echo "in forloop"
+		echo current file is $j
+		TMP=$(grep "#include \"" $j | cut -d "\"" -f2 | sed 's/\..*//')
+		echo "after parse is $TMP"
+		DEPENDENCIES+=( ${TMP} )
+	done 
 
-	echo -e "#purpose of the file: to compile $OUTPUT
+	#echo array: ${FILES[0]}
+	#exit
+	echo -e "#purpose of the file: to compile $OUTPUT 
 #date: ${now}
 #-------------------------------------------------
-output: $OUTPUT.o
-	g++ $@ -o $OUTPUT && ./$OUTPUT
-main.o: $MAIN 
-	g++ -c $MAIN
-clean: 
-	rm *.o $OUTPUT " > "makefile"
-	#chmod +x "compile_$OUTPUT.sh"
+CC=g++
+all: $OUTPUT.o
+	\$(CC) $@ -o $OUTPUT && ./$OUTPUT
+	" > "makefile"
 
+	#create a target for each .cpp and .h file to increase efficiency and add to makefile
+	echo "found $FILES_FOUND files"
+	for((x=0; x<$FILES_FOUND; x++)); do
+		#need to check if depencies exist by checking if the current array index is empt or not
+		if [[ -z ${DEPENDENCIES[$x]} ]]; then
+			continue
+		fi
+		echo -e "${DEPENDENCIES[$x]}: 
+	\$(CC) -c ${DEPENDENCIES[$x]}.cpp ${DEPENDENCIES[$x]}.h" >> "makefile"
+	done
+
+	#finally add clean
+	echo -e "clean: 
+	rm *.o $OUTPUT" >> "makefile" 
 	exit 0
+	#get .cpp files to compile
+	#parse through the files to get the #include "*" to find the .h dependicies
+	#make a target for each .cpp and .h file
 }
 
 function .h
