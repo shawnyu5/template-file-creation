@@ -14,6 +14,7 @@ function bash
 
 
 " > "$NAME.sh"
+	chmod +x "$NAME.sh"
 	#echo "file $NAME.sh created!"
 
 	if [ "$CODE" = 'new' ]; then 
@@ -25,7 +26,6 @@ function bash
 	else
 		vim $NAME.sh
 	fi
-	chmod +x "$NAME.sh"
 	exit 0; 	
 }
 
@@ -55,7 +55,6 @@ int main ()
 	else
 		vim $NAME.cpp
 	fi
-	chmod +x "$NAME.cpp"
 
 	exit 0; 
 }
@@ -97,20 +96,20 @@ function compile
 	echo 'what will be the output file name'
 	read OUTPUT
 	
-	#finding all dependicies in all .cpp files. will ignore all .h files
-	DEPENDENCIES=()
+	#finding dependicies in all .cpp files. will ignore all .h files
+	DEPENDENCIES=() #declare an empty array
 	for j in "$@"; do
 		#if .h file detected, ignore file
 		if [[ "$j" == "*.h" ]]; then
 			continue;
 		fi
 		#echo "in forloop"
-		echo "current file is $j"
+		#echo "current file is $j"
 
 		TMP=$(grep '#include "' $j | cut -d "\"" -f2) #strips everything outside the quotes, leaving only the file name inside the double quotes
 
-		echo "after parse is $TMP"
-		DEPENDENCIES+=( ${TMP} ) #store the file names withthe file extentions in array
+		#echo "after parse is $TMP"
+		DEPENDENCIES+=( ${TMP} ) #store the file names with the file extentions in array
 		echo "DEPENDENCIES are ${DEPENDENCIES[@]}"
 	done 
 
