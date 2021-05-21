@@ -7,7 +7,7 @@ function bash
 {
 	echo -e "#!/bin/bash
 #purpose of this file: 
-#Date: ${now} 
+#Date: ${now}
 #---------------------------------
 
 
@@ -26,7 +26,7 @@ function bash
 		vim $NAME.sh
 	fi
 	chmod +x $NAME.sh
-	exit 0; 	
+	exit 0;
 }
 
 function cpp
@@ -55,7 +55,6 @@ int main ()
 	else
 		vim $NAME.cpp
 	fi
-	chmod +x "$NAME.sh"
 
 	exit 0; 
 }
