@@ -23,7 +23,7 @@ function bash
 		echo "opening $NAME.sh in VS code"
 		code $NAME.sh
 	else
-		vim $NAME.sh
+		$EDITOR $NAME.sh
 	fi
 	chmod +x $NAME.sh
 	exit 0;
@@ -53,7 +53,7 @@ int main ()
 		echo "opening $NAME.cpp in VS code"
 		code $NAME.cpp
 	else
-		vim $NAME.cpp
+		$EDITOR $NAME.cpp
 	fi
 
 	exit 0; 
@@ -77,7 +77,7 @@ Date: ${now}
 		echo "opening $NAME.html in VS code"
 		code $NAME.html
 	else
-		vim $NAME.html
+		$EDITOR $NAME.html
 	fi
 
 	exit 0;
@@ -128,7 +128,7 @@ using namespace std;
 		echo "opening $NAME.h in VS code"
 		code $NAME.h
 	else
-		vim $NAME.h
+		$EDITOR $NAME.h
 	fi
 
 	exit 0;
@@ -144,7 +144,7 @@ function readme
 		echo "opening README.md in VS code"
 		code README.md
 	else
-		vim README.md
+		$EDITOR README.md
 	fi
 
 	exit 0; 
