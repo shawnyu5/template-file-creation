@@ -83,8 +83,29 @@ Date: ${now}
 	exit 0;
 }
 
-
 function compile
+{
+	#echo $@
+	if [ "$#" -eq 0 ]; then
+		echo 'please pass in files to compile as arguments'
+		exit 1;
+	fi
+
+	#ask for the output file name
+	echo 'what will be the output file name'
+	read OUTPUT
+
+	echo -e "#purpose of the file: to compile $OUTPUT
+#date: ${now}
+#-------------------------------------------------
+g++ -o $OUTPUT $@ && ./$OUTPUT" > "compile_$OUTPUT.sh"
+
+	chmod +x "compile_$OUTPUT.sh"
+
+exit 0
+}
+
+function cmake
 {
 	#check if an arguments were passed in
 	if [ "$#" -eq 0 ]; then
