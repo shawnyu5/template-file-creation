@@ -92,7 +92,55 @@ function compile
 		exit 1; 
 	fi
 
-	#ask for the output file name
+	echo -e "#purpose of the file: to compile $OUTPUT
+#date: ${now}
+#-------------------------------------------------
+" > 'makefile'
+
+	#ask for the output object name
+	echo 'what will be the output file name'
+	read OUTPUT
+
+	for CURRENT in $@; do
+		#Will ignore the .h files
+		if [[ "$CURRENT" == *".h" ]]; then
+			continue;
+		fi
+		ALL_FILES+=($(echo "$CURRENT" | sed 's/\..*//')) #store all file name passed in with no extention
+	done
+
+	echo "all: " >> makefile
+	printf "\tg++ -o %s " "$OUTPUT" >>makefile
+
+	for FILE in "${ALL_FILES[@]}"; do
+		printf "%s.o " "$FILE" >> makefile
+	done
+	printf "&& ./%s" "$OUTPUT" >> makefile
+	echo -e "\n\n " >> makefile
+
+	for OBJ in ${ALL_FILES[@]}; do
+		printf "%s.o: %s.cpp \n" "$OBJ" "$OBJ" >> makefile
+		printf "\tg++ -c %s.cpp " "$OBJ"
+
+		echo "current file is $OBJ"
+		echo "file.h is $OBJ.h"
+		for ARG in $@; do
+		{
+			if [[ "$OBJ.h" == $ARG ]]; then
+				echo .h file exists
+			fi
+		}
+		done
+
+	done
+
+	nvim makefile
+	exit
+
+
+
+	####################################################
+	#ask for the output object name
 	echo 'what will be the output file name'
 	read OUTPUT
 	
@@ -113,16 +161,11 @@ function compile
 		echo "DEPENDENCIES are ${DEPENDENCIES[@]}"
 	done 
 
-	echo -e "#purpose of the file: to compile $OUTPUT 
-#date: ${now}
-#-------------------------------------------------
-CC=g++
-" > 'makefile'
 
 	#sets the first output option in the file by appening all files after "output: "
 	printf 'output: ' >> 'makefile'
 	for CURRENT in $@; do
-		CURRENT=$(echo "$CURRENT" | sed 's/\..*//') #gets rig of file extention.
+		CURRENT=$(echo "$CURRENT" | sed 's/\..*//') #gets rid of file extention.
 		printf '%s.o ' "$CURRENT" >> 'makefile' #adds .o extention to files 
 
 	done
