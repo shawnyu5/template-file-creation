@@ -130,14 +130,18 @@ function cmake
 		ALL_FILES+=($(echo "$CURRENT" | sed 's/\..*//')) #store all file name passed in with no extention
 	done
 
-	echo "all: " >> makefile
+	printf "all: " >> makefile
+	for OFILE in ${ALL_FILES[@]}; do
+		printf "$OFILE.o " >> makefile
+	done
+	printf "\n" >> makefile
 	printf "\tg++ -o %s " "$OUTPUT" >>makefile
 
 	for FILE in "${ALL_FILES[@]}"; do
 		printf "%s.o " "$FILE" >> makefile
 	done
 	printf "&& ./%s" "$OUTPUT" >> makefile
-	echo -e "\n" >> makefile
+	printf "\n" >> makefile
 
 	for OBJ in ${ALL_FILES[@]}; do
 		#target
@@ -156,63 +160,11 @@ function cmake
 		#add break after first event
 		printf "\n" >> makefile
 	done
-	nvim makefile
-	exit
-
-
-
-	####################################################
-	#ask for the output object name
-	echo 'what will be the output file name'
-	read OUTPUT
-	
-	#finding dependicies in all .cpp files. will ignore all .h files
-	DEPENDENCIES=() #declare an empty array
-	for j in "$@"; do
-		#if .h file detected, ignore file
-		if [[ "$j" == "*.h" ]]; then
-			continue;
-		fi
-		#echo "in forloop"
-		#echo "current file is $j"
-
-		TMP=$(grep '#include "' $j | cut -d "\"" -f2) #strips everything outside the quotes, leaving only the file name inside the double quotes
-
-		#echo "after parse is $TMP"
-		DEPENDENCIES+=( ${TMP} ) #store the file names with the file extentions in array
-		echo "DEPENDENCIES are ${DEPENDENCIES[@]}"
-	done 
-
-
-	#sets the first output option in the file by appening all files after "output: "
-	printf 'output: ' >> 'makefile'
-	for CURRENT in $@; do
-		CURRENT=$(echo "$CURRENT" | sed 's/\..*//') #gets rid of file extention.
-		printf '%s.o ' "$CURRENT" >> 'makefile' #adds .o extention to files 
-
-	done
-	printf "\n"
-	echo -e "\n	\$(CC) $@ -o $OUTPUT && ./$OUTPUT" >> 'makefile' #add g++ <all files> as the default output option
-
-	#loop through the entirety of the array
-	for((x=0; x<${#DEPENDENCIES[@]}; x++)); do
-		#check if any dependicies exist by checking to make sure array size is greater than 0
-		if [[ ${#DEPENDENCIES[@]} -eq 0 ]]; then
-			#if no dependicies, exit loop
-			break
-		fi
-		#if dependcies do exist, add to the file in the formate:
-		#dependicy.o 
-			#g++ -c dependicy
-		echo -e "$(echo "${DEPENDENCIES[$x]}" | sed 's/\..*/.o/'): ${DEPENDENCIES[$x]} 
-	\$(CC) -c ${DEPENDENCIES[$x]}" >> 'makefile'
-#	echo "DEPENDENCIES x is ${DEPENDENCIES[$x]}"
-	#do this for the number of dependcies found
-	done
 
 	#finally add clean
 	echo -e "clean: 
-	rm *.o $OUTPUT" >> "makefile" 
+	rm *.o $OUTPUT" >> makefile
+	nvim makefile
 	exit 0
 }
 
