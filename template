@@ -137,24 +137,25 @@ function cmake
 		printf "%s.o " "$FILE" >> makefile
 	done
 	printf "&& ./%s" "$OUTPUT" >> makefile
-	echo -e "\n\n " >> makefile
+	echo -e "\n" >> makefile
 
 	for OBJ in ${ALL_FILES[@]}; do
+		#target
 		printf "%s.o: %s.cpp \n" "$OBJ" "$OBJ" >> makefile
-		printf "\tg++ -c %s.cpp " "$OBJ"
-
-		echo "current file is $OBJ"
-		echo "file.h is $OBJ.h"
+		printf "\tg++ -c %s.cpp " "$OBJ" >> makefile
+		#echo "current file is $OBJ"
+		#echo "file.h is $OBJ.h"
 		for ARG in $@; do
 		{
 			if [[ "$OBJ.h" == $ARG ]]; then
 				echo .h file exists
+				printf "%s.h" "$OBJ" >> makefile
 			fi
 		}
 		done
-
+		#add break after first event
+		printf "\n" >> makefile
 	done
-
 	nvim makefile
 	exit
 
@@ -281,6 +282,12 @@ function main
 		compile $@
 	fi
 
+	#if cmake flag is passed in, then auto generate a makefile
+	if [ "$1" = '-cmake' ]; then
+		shift 1
+		cmake $@
+	fi
+
 	#if read flag is passed in, it will create a README.md file and end script
 	if [ "$1" = 'read' ] || [ "$1" = 'readme' ]; then
 		readme
@@ -295,7 +302,7 @@ function main
 		NAME=$1
 	fi
 
-	echo 'what will be the format of the file? (cpp, sh, .h, html, read(REAMDE.md) and compile template)'
+	echo 'what will be the format of the file? (cpp, sh, .h, html, read(REAMDE.md), compile template, or cmake)'
 	read LANUAGE
 	INPUT='false'
 	while [ "$INPUT" = "false" ]; do
