@@ -130,12 +130,11 @@ function cmake
 
 	for CURRENT in $@; do
 
-		FILE=$(grep "#include" $CURRENT)
-		if [[ $FILE == *".cpp" ]]; then
-			continue
-		fi
-
-		DEPENDICIES+=($(cut -d '"' -f2))
+		FILE=$(grep '#include "' $CURRENT)
+		#if [[ $FILE == *".cpp" ]]; then
+			#continue
+		#fi
+		DEPENDICIES+=($(echo "$FILE" | cut -d '"' -f2 | cut -d '.' -f1))
 	done
 
 	printf "all: " >> makefile
@@ -143,6 +142,40 @@ function cmake
 	for CURRENT in ${DEPENDICIES[@]}; do
 		printf "$CURRENT.o " >> makefile
 	done
+
+	printf "\n" >> makefile
+
+	#command for all
+	printf "\tg++ -o %s " "$OUTPUT" >>makefile
+
+	#add all dependicies.o under all option
+	for FILE in "${DEPENDICIES[@]}"; do
+		printf "%s.o " "$FILE" >> makefile
+	done
+
+	#add excute excutable line
+	printf "&& ./%s" "$OUTPUT" >> makefile
+
+	printf "\n" >> makefile
+
+	for CURRENT in ${DEPENDICIES[@]}; do
+		#target
+		printf "%s.o: %s.cpp \n" "$CURRENT" "$CURRENT" >> makefile
+
+		printf "\tg++ -c %s.cpp " "$CURRENT" >> makefile
+
+		for FILE in ./*; do
+			#check if .h file exist within current directory. cpp file can exist without a .h file, but not vice versa
+			if [[ $FILE == "$CURRENT.h" ]]; then
+				printf "%s.h" "$CURRENT" >> makefile
+			fi
+		done
+
+		#add break after first event
+		printf "\n" >> makefile
+	done
+
+	exit
 	######################################
 	for CURRENT in $@; do
 		#Will ignore the .h files
@@ -156,6 +189,7 @@ function cmake
 	for OFILE in ${ALL_FILES[@]}; do
 		printf "$OFILE.o " >> makefile
 	done
+
 	printf "\n" >> makefile
 	printf "\tg++ -o %s " "$OUTPUT" >>makefile
 
