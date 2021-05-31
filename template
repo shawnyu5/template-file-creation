@@ -152,7 +152,7 @@ function readme
 		echo "opening README.md in VS code"
 		code README.md
 	elif [ "$CODE" = 'none' ];then
-		echo "file created"
+		echo " README.md created"
 	else
 		$EDITOR README.md
 	fi
@@ -173,7 +173,8 @@ function main
 		CODE='true'
 		shift 1
 	elif [ "$1" = '-q' ]; then
-		CODE = 'none'
+		CODE='none'
+		shift 1
 	fi
 
 	#if compile flag is passed in, then create special template for compiling a c++ program and end script
@@ -193,7 +194,7 @@ function main
 		echo 'What will be the name of the file'
 		read NAME
 	else #or name of the file can be passed in as an argument
-		NAME=$1
+		NAME="$1"
 	fi
 
 	echo 'what will be the format of the file? (cpp, sh, .h, html, read(REAMDE.md) and compile template)'
