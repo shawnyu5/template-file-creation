@@ -22,6 +22,8 @@ function bash
 	elif [ "$CODE" = 'true' ]; then
 		echo "opening $NAME.sh in VS code"
 		code $NAME.sh
+	elif [ "$CODE" = 'none' ];then
+		echo "$NAME.sh created"
 	else
 		$EDITOR $NAME.sh
 	fi
@@ -52,6 +54,8 @@ int main ()
 	elif [ "$CODE" = 'true' ]; then
 		echo "opening $NAME.cpp in VS code"
 		code $NAME.cpp
+	elif [ "$CODE" = 'none' ];then
+		echo "$NAME.cpp created"
 	else
 		$EDITOR $NAME.cpp
 	fi
@@ -76,6 +80,8 @@ Date: ${now}
 	elif [ "$CODE" = 'true' ]; then
 		echo "opening $NAME.html in VS code"
 		code $NAME.html
+	elif [ "$CODE" = 'none' ];then
+		echo "$NAME.html created"
 	else
 		$EDITOR $NAME.html
 	fi
@@ -127,6 +133,8 @@ using namespace std;
 	elif [ "$CODE" = 'true' ]; then
 		echo "opening $NAME.h in VS code"
 		code $NAME.h
+	elif [ "$CODE" = 'none' ];then
+		echo "$NAME.h created"
 	else
 		$EDITOR $NAME.h
 	fi
@@ -143,6 +151,8 @@ function readme
 	elif [ "$CODE" = 'true' ]; then
 		echo "opening README.md in VS code"
 		code README.md
+	elif [ "$CODE" = 'none' ];then
+		echo "file created"
 	else
 		$EDITOR README.md
 	fi
@@ -162,6 +172,8 @@ function main
 	elif [ "$1" = '-c' ]; then
 		CODE='true'
 		shift 1
+	elif [ "$1" = '-q' ]; then
+		CODE = 'none'
 	fi
 
 	#if compile flag is passed in, then create special template for compiling a c++ program and end script
