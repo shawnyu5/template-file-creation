@@ -7,7 +7,7 @@ function bash
 {
 	echo -e "#!/bin/bash
 #purpose of this file: 
-#Date: ${now} 
+#Date: ${now}
 #---------------------------------
 
 
@@ -23,8 +23,10 @@ function bash
 	elif [ "$CODE" = 'true' ]; then
 		echo "opening $NAME.sh in VS code"
 		code $NAME.sh
+	elif [ "$CODE" = 'none' ];then
+		echo "$NAME.sh created"
 	else
-		vim $NAME.sh
+		$EDITOR $NAME.sh
 	fi
 	exit 0; 	
 }
@@ -52,8 +54,10 @@ int main ()
 	elif [ "$CODE" = 'true' ]; then
 		echo "opening $NAME.cpp in VS code"
 		code $NAME.cpp
+	elif [ "$CODE" = 'none' ];then
+		echo "$NAME.cpp created"
 	else
-		vim $NAME.cpp
+		$EDITOR $NAME.cpp
 	fi
 
 	exit 0; 
@@ -76,8 +80,10 @@ Date: ${now}
 	elif [ "$CODE" = 'true' ]; then
 		echo "opening $NAME.html in VS code"
 		code $NAME.html
+	elif [ "$CODE" = 'none' ];then
+		echo "$NAME.html created"
 	else
-		vim $NAME.html
+		$EDITOR $NAME.html
 	fi
 
 	exit 0;
@@ -183,7 +189,6 @@ using namespace std;
 
 
 #endif" > "$NAME.h"
-	chmod +x "$NAME.h"
 
 	if [ "$CODE" = 'new' ]; then 
 		echo "opening $NAME.h in new VS code window"
@@ -191,8 +196,10 @@ using namespace std;
 	elif [ "$CODE" = 'true' ]; then
 		echo "opening $NAME.h in VS code"
 		code $NAME.h
+	elif [ "$CODE" = 'none' ];then
+		echo "$NAME.h created"
 	else
-		vim $NAME.h
+		$EDITOR $NAME.h
 	fi
 
 	exit 0;
@@ -207,8 +214,10 @@ function readme
 	elif [ "$CODE" = 'true' ]; then
 		echo "opening README.md in VS code"
 		code README.md
+	elif [ "$CODE" = 'none' ];then
+		echo " README.md created"
 	else
-		vim README.md
+		$EDITOR README.md
 	fi
 
 	exit 0; 
@@ -226,22 +235,21 @@ function main
 	elif [ "$1" = '-c' ]; then
 		CODE='true'
 		shift 1
+	elif [ "$1" = '-q' ]; then
+		CODE='none'
+		shift 1
 	fi
 
 	#if compile flag is passed in, then create special template for compiling a c++ program and end script
 	if [ "$1" = '-compile' ]; then
 		shift 1
 		compile $@
-	fi
-
 	#if cmake flag is passed in, then auto generate a makefile
-	if [ "$1" = '-cmake' ]; then
+	elif [ "$1" = '-cmake' ]; then
 		shift 1
 		cmake $@
-	fi
-
 	#if read flag is passed in, it will create a README.md file and end script
-	if [ "$1" = 'read' ] || [ "$1" = 'readme' ]; then
+	elif [ "$1" = 'read' ] || [ "$1" = 'readme' ]; then
 		readme
 		exit 0; 
 	fi
@@ -251,7 +259,7 @@ function main
 		echo 'What will be the name of the file'
 		read NAME
 	else #or name of the file can be passed in as an argument
-		NAME=$1
+		NAME="$1"
 	fi
 
 	echo 'what will be the format of the file? (cpp, sh, .h, html, read(REAMDE.md), compile template, or cmake)'
@@ -266,7 +274,7 @@ function main
 			'readme') readme ;;
 			'read') readme ;;
 			'html') html ;;
-			*) echo "***$LANUAGE*** is not a supported formate, supported formats are cpp, sh, .h, html, read(README.md) and compile template"
+			*) echo "***$LANUAGE*** is not a supported formate, supported formats are cpp, sh, .h, html and read(README.md)"
 
 			echo 'what will be the name of the file'
 			read NAME
