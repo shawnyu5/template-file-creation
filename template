@@ -125,7 +125,6 @@ using namespace std;
 
 
 #endif" > "$NAME.h"
-	chmod +x "$NAME.h"
 
 	if [ "$CODE" = 'new' ]; then 
 		echo "opening $NAME.h in new VS code window"
