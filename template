@@ -128,8 +128,22 @@ function cmake
 	echo 'what will be the output file name'
 	read OUTPUT
 
-	DEPENDICIES+=($(sed
-	#######################
+	for CURRENT in $@; do
+
+		FILE=$(grep "#include" $CURRENT)
+		if [[ $FILE == *".cpp" ]]; then
+			continue
+		fi
+
+		DEPENDICIES+=($(cut -d '"' -f2))
+	done
+
+	printf "all: " >> makefile
+
+	for CURRENT in ${DEPENDICIES[@]}; do
+		printf "$CURRENT.o " >> makefile
+	done
+	######################################
 	for CURRENT in $@; do
 		#Will ignore the .h files
 		if [[ "$CURRENT" == *".h" ]]; then
