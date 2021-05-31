@@ -208,7 +208,7 @@ function main
 			'readme') readme ;;
 			'read') readme ;;
 			'html') html ;;
-			*) echo "***$LANUAGE*** is not a supported formate, supported formats are cpp, sh, .h, html, read(README.md) and compile template"
+			*) echo "***$LANUAGE*** is not a supported formate, supported formats are cpp, sh, .h, html and read(README.md)"
 
 			echo 'what will be the name of the file'
 			read NAME
