@@ -170,7 +170,7 @@ function cmake
 	#finally add clean
 	echo -e "clean: 
 	rm *.o $OUTPUT" >> makefile
-	nvim makefile
+	#nvim makefile
 	exit 0
 }
 
