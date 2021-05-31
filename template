@@ -128,6 +128,8 @@ function cmake
 	echo 'what will be the output file name'
 	read OUTPUT
 
+	DEPENDICIES+=($(sed
+	#######################
 	for CURRENT in $@; do
 		#Will ignore the .h files
 		if [[ "$CURRENT" == *".h" ]]; then
