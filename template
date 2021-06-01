@@ -150,7 +150,7 @@ function cmake
 		done
 	done
 
-	printf "all: " >> makefile
+	printf "output: " >> makefile
 
 	for CURRENT in ${DEPENDICIES[@]}; do
 		printf "$CURRENT.o " >> makefile
