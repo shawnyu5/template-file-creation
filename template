@@ -129,12 +129,25 @@ function cmake
 	read OUTPUT
 
 	for CURRENT in $@; do
+		FILE=$(grep '#include "' $CURRENT | cut -d '"' -f2 | cut -d '.' -f1)
+		TMP+=($FILE)
 
-		FILE=$(grep '#include "' $CURRENT)
-		#if [[ $FILE == *".cpp" ]]; then
-			#continue
-		#fi
-		DEPENDICIES+=($(echo "$FILE" | cut -d '"' -f2 | cut -d '.' -f1))
+		#manually add files passed in as command line arguments to array
+		FILE=$(echo $CURRENT | cut -d '.' -f1)
+		#echo $FILE
+		TMP+=($FILE)
+
+		#parse though array to make sure there are no duplicate entries
+		for ((i=0; i <=${#TMP[@]}; i++)); do
+
+			if [[ ${TMP[$i]} == ${TMP[($i+1)]} ]]; then
+				#echo "if loop entered"
+				continue
+			else
+				DEPENDICIES+=(${TMP[$i]})
+			fi
+
+		done
 	done
 
 	printf "all: " >> makefile
@@ -175,53 +188,12 @@ function cmake
 		printf "\n" >> makefile
 	done
 
-	exit
-	######################################
-	for CURRENT in $@; do
-		#Will ignore the .h files
-		if [[ "$CURRENT" == *".h" ]]; then
-			continue;
-		fi
-		ALL_FILES+=($(echo "$CURRENT" | sed 's/\..*//')) #store all file name passed in with no extention
-	done
-
-	printf "all: " >> makefile
-	for OFILE in ${ALL_FILES[@]}; do
-		printf "$OFILE.o " >> makefile
-	done
-
-	printf "\n" >> makefile
-	printf "\tg++ -o %s " "$OUTPUT" >>makefile
-
-	for FILE in "${ALL_FILES[@]}"; do
-		printf "%s.o " "$FILE" >> makefile
-	done
-	printf "&& ./%s" "$OUTPUT" >> makefile
-	printf "\n" >> makefile
-
-	for OBJ in ${ALL_FILES[@]}; do
-		#target
-		printf "%s.o: %s.cpp \n" "$OBJ" "$OBJ" >> makefile
-		printf "\tg++ -c %s.cpp " "$OBJ" >> makefile
-		#echo "current file is $OBJ"
-		#echo "file.h is $OBJ.h"
-		for ARG in $@; do
-		{
-			if [[ "$OBJ.h" == $ARG ]]; then
-				echo .h file exists
-				printf "%s.h" "$OBJ" >> makefile
-			fi
-		}
-		done
-		#add break after first event
-		printf "\n" >> makefile
-	done
-
 	#finally add clean
-	echo -e "clean: 
+	echo -e "clean:
 	rm *.o $OUTPUT" >> makefile
 	#nvim makefile
-	exit 0
+
+	exit
 }
 
 function .h
