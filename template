@@ -119,14 +119,15 @@ function cmake
 		exit 1; 
 	fi
 
+	#ask for the output object name
+	echo 'what will be the output file name'
+	read OUTPUT
+
 	echo -e "#purpose of the file: to compile $OUTPUT
 #date: ${now}
 #-------------------------------------------------
 " > 'makefile'
 
-	#ask for the output object name
-	echo 'what will be the output file name'
-	read OUTPUT
 
 	for CURRENT in $@; do
 		FILE=$(grep '#include "' $CURRENT | cut -d '"' -f2 | cut -d '.' -f1)
@@ -170,20 +171,21 @@ function cmake
 
 	printf "\n\n" >> makefile
 
+	#for all other targets
 	for CURRENT in ${DEPENDICIES[@]}; do
 		#target
 		printf "%s.o: %s.cpp " "$CURRENT" "$CURRENT" >> makefile
 
 		for HFILE in $(ls *.h); do
-			#check if .h file exist within current directory. Assuming there is one header file per cpp file
+			#check if .h file exist within current directory.
+			#Assuming there is one header file per cpp file
 			#echo "current hfile is $HFILE"
 			if [[ $HFILE == "$CURRENT.h" ]]; then
-				#if a .h file exist, add to target
-				printf "%s.h\n" "$CURRENT" >> makefile
-			else
-				printf "\n"
+				#if a .h file exist in current directory, add to target
+				printf "%s.h" "$CURRENT" >> makefile
 			fi
 		done
+		printf "\n" >> makefile
 
 		printf "\tg++ -c %s.cpp " "$CURRENT" >> makefile
 
