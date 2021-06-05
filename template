@@ -134,7 +134,6 @@ function cmake
 
 		#manually add files passed in as command line arguments to array
 		FILE=$(echo $CURRENT | cut -d '.' -f1)
-		#echo $FILE
 		TMP+=($FILE)
 
 		#parse though array to make sure there are no duplicate entries
@@ -169,23 +168,27 @@ function cmake
 	#add excute excutable line
 	printf "&& ./%s" "$OUTPUT" >> makefile
 
-	printf "\n" >> makefile
+	printf "\n\n" >> makefile
 
 	for CURRENT in ${DEPENDICIES[@]}; do
 		#target
-		printf "%s.o: %s.cpp \n" "$CURRENT" "$CURRENT" >> makefile
+		printf "%s.o: %s.cpp " "$CURRENT" "$CURRENT" >> makefile
 
-		printf "\tg++ -c %s.cpp " "$CURRENT" >> makefile
-
-		for FILE in ./*; do
-			#check if .h file exist within current directory. cpp file can exist without a .h file, but not vice versa
-			if [[ $FILE == "$CURRENT.h" ]]; then
-				printf "%s.h" "$CURRENT" >> makefile
+		for HFILE in $(ls *.h); do
+			#check if .h file exist within current directory. Assuming there is one header file per cpp file
+			#echo "current hfile is $HFILE"
+			if [[ $HFILE == "$CURRENT.h" ]]; then
+				#if a .h file exist, add to target
+				printf "%s.h\n" "$CURRENT" >> makefile
+			else
+				printf "\n"
 			fi
 		done
 
+		printf "\tg++ -c %s.cpp " "$CURRENT" >> makefile
+
 		#add break after first event
-		printf "\n" >> makefile
+		printf "\n\n" >> makefile
 	done
 
 	#finally add clean
