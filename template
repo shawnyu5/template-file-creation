@@ -150,7 +150,8 @@ function cmake
 		done
 	done
 
-	printf "output: " >> makefile
+	#add main rule
+	printf "$OUTPUT: " >> makefile
 
 	for CURRENT in ${DEPENDICIES[@]}; do
 		printf "$CURRENT.o " >> makefile
@@ -171,7 +172,7 @@ function cmake
 
 	printf "\n\n" >> makefile
 
-	#for all other targets
+	#for all other rules
 	for CURRENT in ${DEPENDICIES[@]}; do
 		#target
 		printf "%s.o: %s.cpp " "$CURRENT" "$CURRENT" >> makefile
