@@ -106,14 +106,36 @@ g++ -o $OUTPUT $@ && ./$OUTPUT" > "compile_$OUTPUT.sh"
 exit 0
 }
 
+function debug
+{
+	if [ "$#" -eq 0 ]; then
+		echo 'please pass in files to compile as arguments'
+		exit 1;
+	fi
+
+	#ask for the output file name
+	echo 'what will be the output file name'
+	read OUTPUT
+
+	echo -e "#purpose of the file: to debug $OUTPUT
+#date: ${now}
+#-------------------------------------------------
+g++ -g -o $OUTPUT $@ && valgrind --track-origins=yes --leak-check=full ./$OUTPUT" > "debug_$OUTPUT.sh"
+
+	chmod +x "debug_$OUTPUT.sh"
+
+exit 0
+}
+
+
 function .h
 {
 	echo -e "//purpose of this file: 
 //Date: ${now}
 //---------------------------------
 #define _CRT_SECURE_NO_WARNINGS
-#ifndef SDDS_${NAME^^}_H_
-#define SDDS_${NAME^^}_H_
+#ifndef ${NAME^^}_H_
+#define ${NAME^^}_H_
 #include <iostream>
 using namespace std; 
 
@@ -168,6 +190,9 @@ function main
 	if [ "$1" = '-compile' ]; then
 		shift 1
 		compile $@
+	elif [ "$1" = '-debug' ]; then
+		shift 1
+		debug $@
 	fi
 
 	#if read flag is passed in, it will create a README.md file and end script
@@ -184,8 +209,9 @@ function main
 		NAME=$1
 	fi
 
-	echo 'what will be the format of the file? (cpp, sh, .h, html, read(REAMDE.md) and compile template)'
+	echo 'what will be the format of the file? (cpp, sh, .h, html, read(REAMDE.md), compile template and debug template)'
 	read LANUAGE
+
 	INPUT='false'
 	while [ "$INPUT" = "false" ]; do
 		
@@ -202,7 +228,7 @@ function main
 			read NAME
 
 			echo 'what format would you like? (cpp, sh, .h, html, read(REAMDE.md) and compile template)'
-			read LANUAGE;;  
+			read LANUAGE
 		esac
 	done
 }
