@@ -1,4 +1,5 @@
 # template-file-creation
+
 this program creates pre determined template files in a variety of programming languages
 
 ## installation
@@ -8,7 +9,7 @@ this program creates pre determined template files in a variety of programming l
 git clone https://github.com/themagicguy/template-file-creation
 ```
 
-2. have the ability to run the command globally by adding folder to path. 
+2. Have the ability to run the command globally by adding folder to path.
 
 ```
 chmod +x template-file-creation/template
@@ -18,10 +19,16 @@ sudo cp template-file-creation/template /usr/local/bin/
 And you are ready to go!!
 
 ## usage
+
 ```
 template
 ```
-by default, when you run the template command on it's own, it will prompt the user for the language, and name of the file. and creates a file with these comments at the top, and open the file it just created in vim, as well as give the file excutable permission, where applicable.
+
+By default, when you run the template command on it's own, it will prompt the
+user for the language, and name of the file. And creates a file with these
+comments at the top, and open the file it just created in your default editor, as well as give
+the file executable permission, where applicable.
+
 ```
 purpose of this file:
 
@@ -30,22 +37,33 @@ Date: <current date>
 ---------------------------------
 ```
 
-the -c option will open a file in vs code instead of vim. 
+The -c option will open a file in vs code instead of your default editor.
+
 ```bash
 template -c
 ```
 
-will create a file that will compile c++ files through g++, and run the file.
+The `-compile` flag will create a file that will compile C++ files through G++
+
 ```bash
 template -compile <c++ files>
 ```
 
-will create a c++ style header file with header guards 
-```
+Will create a C++ style header file with header guards
+
+```bash
 template .h
 ```
 
-running the command with the file name passed in will then prompt the user for the format of the file and create a file with that name. 
+Running the command with the file name passed in will then prompt the user for
+the format of the file and create a file with that name.
+
 ```bash
 template <NEW_FILE_NAME>
+```
+
+The `-q` option will create the file and do nothing
+
+```bash
+template -q
 ```
