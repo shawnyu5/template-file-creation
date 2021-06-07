@@ -204,8 +204,6 @@ function main
 	elif [ "$1" = '-debug' ]; then
 		shift 1
 		debug $@
-	fi
-
 	#if read flag is passed in, it will create a README.md file and end script
 	elif [ "$1" = 'read' ] || [ "$1" = 'readme' ]; then
 		readme
