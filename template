@@ -14,8 +14,7 @@ function bash
 
 
 " > "$NAME.sh"
-	chmod +x "$NAME.sh"
-	#echo "file $NAME.sh created!"
+	chmod +x $NAME.sh
 
 	if [ "$CODE" = 'new' ]; then 
 		echo "opening $NAME.sh in new VS code window"
@@ -208,8 +207,8 @@ function .h
 //Date: ${now}
 //---------------------------------
 #define _CRT_SECURE_NO_WARNINGS
-#ifndef SDDS_${NAME^^}_H_
-#define SDDS_${NAME^^}_H_
+#ifndef ${NAME^^}_H_
+#define ${NAME^^}_H_
 #include <iostream>
 #include <string>
 #include <cstring>
@@ -276,6 +275,9 @@ function main
 	elif [ "$1" = '-cmake' ]; then
 		shift 1
 		cmake $@
+	elif [ "$1" = '-debug' ]; then
+		shift 1
+		debug $@
 	#if read flag is passed in, it will create a README.md file and end script
 	elif [ "$1" = 'read' ] || [ "$1" = 'readme' ]; then
 		readme
@@ -290,8 +292,9 @@ function main
 		NAME="$1"
 	fi
 
-	echo 'what will be the format of the file? (cpp, sh, .h, html, read(REAMDE.md), compile template, or cmake)'
+	echo 'what will be the format of the file? (cpp, sh, .h, html, read(REAMDE.md), compile template and debug template)'
 	read LANUAGE
+
 	INPUT='false'
 	while [ "$INPUT" = "false" ]; do
 		
@@ -308,7 +311,7 @@ function main
 			read NAME
 
 			echo 'what format would you like? (cpp, sh, .h, html, read(REAMDE.md) and compile template)'
-			read LANUAGE;;  
+			read LANUAGE
 		esac
 	done
 }
