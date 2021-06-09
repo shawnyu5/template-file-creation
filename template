@@ -140,7 +140,7 @@ function cmake
 		#parse though array to make sure there are no duplicate entries
 		for ((i=0; i <=${#TMP[@]}; i++)); do
 
-			if [[ ${TMP[$i]} == ${TMP[($i+1)]} ]]; then
+			if [[ ${TMP[$i]} == ${TMP[@]} ]]; then
 				#echo "if loop entered"
 				continue
 			else
