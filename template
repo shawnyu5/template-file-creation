@@ -103,10 +103,31 @@ function compile
 	echo -e "#purpose of the file: to compile $OUTPUT
 #date: ${now}
 #-------------------------------------------------
-g++ -o $OUTPUT $@ && ./$OUTPUT" > "compile_$OUTPUT.sh"
+g++ -g -Wall -o $OUTPUT $@ && ./$OUTPUT" > "compile_$OUTPUT.sh"
 
 	chmod +x "compile_$OUTPUT.sh"
+exit 0
+}
 
+
+function debug
+{
+	#echo $@
+	if [ "$#" -eq 0 ]; then
+		echo 'please pass in files to compile as arguments'
+		exit 1;
+	fi
+
+	#ask for the output file name
+	echo 'what will be the output file name'
+	read OUTPUT
+
+	echo -e "#purpose of the file: to debug $OUTPUT
+#date: ${now}
+#-------------------------------------------------
+g++ -g -o $OUTPUT $@ && valgrind --leak-check=full ./$OUTPUT" > "compile_$OUTPUT.sh"
+
+	chmod +x "compile_$OUTPUT.sh"
 exit 0
 }
 
