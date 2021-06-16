@@ -291,10 +291,6 @@ function main
 	if [ "$1" = '-compile' ]; then
 		shift 1
 		compile $@
-	#if cmake flag is passed in, then auto generate a makefile
-	elif [ "$1" = '-cmake' ]; then
-		shift 1
-		cmake $@
 	elif [ "$1" = '-debug' ]; then
 		shift 1
 		debug $@
