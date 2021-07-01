@@ -249,4 +249,5 @@ function main
 	done
 }
 
+#source ~/scripts/template-file-creation/template-completion.bash
 main $@
