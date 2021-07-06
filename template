@@ -106,7 +106,7 @@ function compile
 	echo -e "#purpose of the file: to compile $OUTPUT
 #date: ${now}
 #-------------------------------------------------
-g++ -g -Wall -o $OUTPUT $@ && ./$OUTPUT" > "compile_$OUTPUT.sh"
+g++ -g -Wall -o $OUTPUT $@ && ./$OUTPUT | tee ouput.txt" > "compile_$OUTPUT.sh"
 
 	chmod +x "compile_$OUTPUT.sh"
 	INPUT='true'
