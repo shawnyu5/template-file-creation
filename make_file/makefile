@@ -1,13 +1,13 @@
-#purpose of the file: to compile hello
-#date: <date>
+#purpose of the file: to compile hfsd
+#date: 2021-07-11
 #-------------------------------------------------
-
-hello: hello.cpp hello.h
-	 g++ -Wall -g hello.cpp && ./hello | tee output.txt
+    
+hfsd: hello.o 
+	 g++ -Wall -g -o hfsd hello.o && ./hfsd | tee output.txt
 
 clean:
-	rm -f *.o hello
+	rm -f *.o hfsd
 
-memory: hello
-	valgrind -s --leak-check=full --track-origins=yes ./hello
+memory: hfsd
+	valgrind -s --leak-check=full --track-origins=yes ./hfsd
 

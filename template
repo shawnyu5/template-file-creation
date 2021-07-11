@@ -144,16 +144,16 @@ function make
     read OUTPUT
 
     echo -e "#purpose of the file: to compile $OUTPUT
-    #date: ${now}
-    #-------------------------------------------------
+#date: ${now}
+#-------------------------------------------------
     " > 'makefile'
 
+    #add all .cpp files to array
     for CURRENT in $@; do
-        if [[ $CURRENT == "*.h" ]]; then
+        if [[ $CURRENT == *".h" ]]; then
             echo "$CURRENT ignored"
             continue
         fi
-
         #gets rid of extension on files passed in and store in array
         FILE+=$(echo "$CURRENT" | cut -d '"' -f2 | cut -d '.' -f1)
     done
@@ -162,20 +162,20 @@ function make
     printf "$OUTPUT: " >> makefile
 
     for CURRENT in ${FILE[@]}; do
-        printf "$CURRENT.cpp " >> makefile
+        printf "$CURRENT.o " >> makefile
 
-        #check if .h file exist
-        if [[ -f "$CURRENT.h" ]]; then
-            #if .h file exist, add to make file
-            printf "$CURRENT.h" >> makefile
-        fi
+        ##check if .h file exist
+        #if [[ -f "$CURRENT.h" ]]; then
+            ##if .h file exist, add to make file
+            #printf "$CURRENT.h" >> makefile
+        #fi
     done
     printf "\n" >> makefile
 
     #add command for first rule
-    printf "\t g++ -Wall -g " >> makefile
+    printf "\t g++ -Wall -g -o $OUTPUT " >> makefile
     for CURRENT in ${FILE[@]}; do
-        printf "$CURRENT.cpp" >> makefile
+        printf "$CURRENT.o" >> makefile
     done
     printf " && ./$OUTPUT | tee output.txt\n\n" >> makefile
 
@@ -184,6 +184,7 @@ function make
 
     #add mem check rule
     printf "memory: $OUTPUT\n\tvalgrind -s --leak-check=full --track-origins=yes ./$OUTPUT\n\n" >> makefile
+    exit
 }
 
 function .h
@@ -258,7 +259,7 @@ function main
 	#if make flag is passed in, then auto generate a makefile
 	elif [ "$1" = '-make' ]; then
 		shift 1
-		cmake $@
+		make $@
 	elif [ "$1" = '-debug' ]; then
 		shift 1
 		debug $@
