@@ -130,7 +130,7 @@ g++ -g -o $OUTPUT $@ && valgrind --leak-check=full ./$OUTPUT" > "compile_$OUTPUT
 exit 0
 }
 
-function cmake
+function make
 {
 	#check if an arguments were passed in
 	if [ "$#" -eq 0 ]; then
@@ -282,17 +282,16 @@ function main
 	elif [ "$1" = '-c' ]; then
 		CODE='true'
 		shift 1
+    #-q flag will do nothing
 	elif [ "$1" = '-q' ]; then
 		CODE='none'
 		shift 1
-	fi
-
 	#if compile flag is passed in, then create special template for compiling a c++ program and end script
-	if [ "$1" = '-compile' ]; then
+    elif [ "$1" = '-compile' ]; then
 		shift 1
 		compile $@
-	#if cmake flag is passed in, then auto generate a makefile
-	elif [ "$1" = '-cmake' ]; then
+	#if make flag is passed in, then auto generate a makefile
+	elif [ "$1" = '-make' ]; then
 		shift 1
 		cmake $@
 	elif [ "$1" = '-debug' ]; then
@@ -312,7 +311,7 @@ function main
 		NAME="$1"
 	fi
 
-	echo 'what will be the format of the file? (cpp, sh, .h, html, read(REAMDE.md), compile template and debug template)'
+	echo 'what will be the format of the file? (cpp, sh, .h, html, read(REAMDE.md)'
 	read LANUAGE
 
 	INPUT='false'
@@ -325,12 +324,12 @@ function main
 			'readme') readme ;;
 			'read') readme ;;
 			'html') html ;;
-			*) echo "***$LANUAGE*** is not a supported formate, supported formats are cpp, sh, .h, html and read(README.md)"
+			*) echo "***$LANUAGE*** is not a supported formate, supported formats are cpp, sh, h, html and read(README.md)"
 
 			echo 'what will be the name of the file'
 			read NAME
 
-			echo 'what format would you like? (cpp, sh, .h, html, read(REAMDE.md) and compile template)'
+			echo 'what format would you like? (cpp, sh, h, html, and read(REAMDE.md)'
 			read LANUAGE
 		esac
 	done
