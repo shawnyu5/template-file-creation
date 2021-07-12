@@ -130,7 +130,7 @@ g++ -g -o $OUTPUT $@ && valgrind --leak-check=full ./$OUTPUT" > "compile_$OUTPUT
 exit 0
 }
 
-function make
+function autoMake
 {
 
     #check if an arguments were passed in
@@ -153,9 +153,13 @@ function make
         if [[ $CURRENT == *".h" ]]; then
             echo "$CURRENT ignored"
             continue
+        elif [[ $CURRENT == *".txt" ]]; then
+            echo "argument $CURRENT added"
+            ARGUMENT+=($CURRENT)
+        else
+            #gets rid of extension on files passed in and store in array
+            FILE+=$(echo "$CURRENT" | cut -d '"' -f2 | cut -d '.' -f1)
         fi
-        #gets rid of extension on files passed in and store in array
-        FILE+=$(echo "$CURRENT" | cut -d '"' -f2 | cut -d '.' -f1)
     done
 
     #add first rule
@@ -163,12 +167,6 @@ function make
 
     for CURRENT in ${FILE[@]}; do
         printf "$CURRENT.o " >> makefile
-
-        ##check if .h file exist
-        #if [[ -f "$CURRENT.h" ]]; then
-            ##if .h file exist, add to make file
-            #printf "$CURRENT.h" >> makefile
-        #fi
     done
     printf "\n" >> makefile
 
@@ -177,14 +175,14 @@ function make
     for CURRENT in ${FILE[@]}; do
         printf "$CURRENT.o" >> makefile
     done
-    printf " && ./$OUTPUT | tee output.txt\n\n" >> makefile
+    printf " && ./$OUTPUT ${ARGUMENT[*]} | tee output.txt\n\n" >> makefile
 
     #add clean rule
     printf "clean:\n\trm -f *.o $OUTPUT\n\n" >> makefile
 
-    #add mem check rule
-    printf "memory: $OUTPUT\n\tvalgrind -s --leak-check=full --track-origins=yes ./$OUTPUT\n\n" >> makefile
-    $EDITOR makefile
+    #add valgrind check rule
+    printf "valgrind: $OUTPUT\n\tvalgrind -s --leak-check=full --track-origins=yes ./$OUTPUT\n\n" >> makefile
+    #$EDITOR makefile
     exit
 }
 
@@ -260,7 +258,7 @@ function main
 	#if make flag is passed in, then auto generate a makefile
 	elif [ "$1" = '-make' ]; then
 		shift 1
-		make $@
+		autoMake $@
 	elif [ "$1" = '-debug' ]; then
 		shift 1
 		debug $@
