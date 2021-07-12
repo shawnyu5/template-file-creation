@@ -184,6 +184,7 @@ function make
 
     #add mem check rule
     printf "memory: $OUTPUT\n\tvalgrind -s --leak-check=full --track-origins=yes ./$OUTPUT\n\n" >> makefile
+    $EDITOR makefile
     exit
 }
 
