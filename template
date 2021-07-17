@@ -37,7 +37,10 @@ function cpp
 //---------------------------------
 #include <iostream>
 #include <string>
-using namespace std;
+#include <iomanip>
+using std::cout;
+using std::endl;
+using std::string;
 
 int main ()
 {
@@ -182,11 +185,15 @@ function autoMake
 
     #add valgrind check rule
     printf "valgrind: $OUTPUT\n\tvalgrind -s --leak-check=full --track-origins=yes ./$OUTPUT\n\n" >> makefile
+
+    #add compile rule
+    printf "c: $OUTPUT\n\t./$OUTPUT ${ARGUMENT[*]} | tee output.txt\n\n" >> makefile
+
     #$EDITOR makefile
     exit
 }
 
-function .h
+function header
 {
 	echo -e "//purpose of this file:
 //Date: ${now}
@@ -196,8 +203,10 @@ function .h
 #define ${NAME^^}_H_
 #include <iostream>
 #include <string>
-#include <cstring>
-using namespace std; 
+#include <utility>
+using std::cout;
+using std::endl;
+using std::string;
 
 
 #endif" > "$NAME.h"
@@ -276,7 +285,7 @@ function main
 		NAME="$1"
 	fi
 
-	echo 'what will be the format of the file? (cpp, sh, .h, html, read(REAMDE.md)'
+	echo 'what will be the format of the file? (cpp, sh, h, html, read(REAMDE.md)'
 	read LANUAGE
 
 	INPUT='false'
@@ -285,16 +294,13 @@ function main
 		case "$LANUAGE" in 
 			'cpp') cpp ;;
 			'sh') bash ;;
-			'.h') .h ;;
+			'h') header ;;
 			'readme') readme ;;
 			'read') readme ;;
 			'html') html ;;
 			*) echo "***$LANUAGE*** is not a supported formate, supported formats are cpp, sh, h, html and read(README.md)"
 
-			echo 'what will be the name of the file'
-			read NAME
-
-			echo 'what format would you like? (cpp, sh, h, html, and read(REAMDE.md)'
+			echo 'what format would you like?'
 			read LANUAGE
 		esac
 	done
