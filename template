@@ -153,15 +153,18 @@ function autoMake
 
     #add all .cpp files to array
     for CURRENT in $@; do
+        #ignore header files
         if [[ $CURRENT == *".h" ]]; then
             echo "$CURRENT ignored"
             continue
+            #interperate txt files as arguments to program
         elif [[ $CURRENT == *".txt" ]]; then
             echo "argument $CURRENT added"
             ARGUMENT+=($CURRENT)
         else
             #gets rid of extension on files passed in and store in array
             FILE+=$(echo "$CURRENT" | cut -d '"' -f2 | cut -d '.' -f1)
+            FILE+=' '
         fi
     done
 
@@ -176,18 +179,30 @@ function autoMake
     #add command for first rule
     printf "\t g++ -Wall -g -o $OUTPUT " >> makefile
     for CURRENT in ${FILE[@]}; do
-        printf "$CURRENT.o" >> makefile
+        printf "$CURRENT.o " >> makefile
     done
     printf " && ./$OUTPUT ${ARGUMENT[*]} | tee output.txt\n\n" >> makefile
 
     #add clean rule
     printf "clean:\n\trm -f *.o $OUTPUT\n\n" >> makefile
 
-    #add valgrind check rule
+    #add valgrind rule
     printf "valgrind: $OUTPUT\n\tvalgrind -s --leak-check=full --track-origins=yes ./$OUTPUT\n\n" >> makefile
 
     #add compile rule
     printf "c: $OUTPUT\n\t./$OUTPUT ${ARGUMENT[*]} | tee output.txt\n\n" >> makefile
+
+    echo "#--------------------------------------------" >> makefile
+
+    #add receipe for the files passed in
+    for CURRENT in ${FILE[@]}; do
+        printf "$CURRENT.o: $CURRENT.cpp " >> makefile
+        if [[ -f "$CURRENT.h" ]]; then
+            printf "$CURRENT.h" >> makefile
+        fi
+        printf "\n\tg++ -c $CURRENT.cpp\n\n" >> makefile
+
+    done
 
     #$EDITOR makefile
     exit
