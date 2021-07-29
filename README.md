@@ -49,12 +49,6 @@ The `-compile` flag will create a file that will compile C++ files through G++
 template -compile <c++ files>
 ```
 
-Will create a C++ style header file with header guards
-
-```bash
-template .h
-```
-
 Running the command with the file name passed in will then prompt the user for
 the format of the file and create a file with that name.
 
