@@ -40,6 +40,7 @@ function cpp
 #include <iostream>
 #include <string>
 #include <utility>
+#include <iomanip>
 using std::cout;
 using std::endl;
 using std::string;
@@ -133,8 +134,82 @@ g++ -g -o $OUTPUT $@ && valgrind -s --leak-check=full --show-leak-kinds=all ./$O
 	INPUT='true'
 }
 
+function autoMake
+{
 
-function .h
+    #check if an arguments were passed in
+    if [ "$#" -eq 0 ]; then
+        echo 'USAGE: template -make <files to compile.cpp>'
+        exit 1;
+    fi
+
+    #ask for the output object name
+    echo 'what will be the output file name'
+    read OUTPUT
+
+    echo -e "#purpose of the file: to compile $OUTPUT
+#date: ${now}
+#-------------------------------------------------
+    " > 'makefile'
+
+    #add all .cpp files to array
+    for CURRENT in $@; do
+        #ignore header files
+        if [[ $CURRENT == *".h" ]]; then
+            echo "$CURRENT ignored"
+            continue
+            #interperate txt files as arguments to program
+        elif [[ $CURRENT == *".txt" ]]; then
+            echo "argument $CURRENT added"
+            ARGUMENT+=($CURRENT)
+        else
+            #gets rid of extension on files passed in and store in array
+            FILE+=$(echo "$CURRENT" | cut -d '"' -f2 | cut -d '.' -f1)
+            FILE+=' '
+        fi
+    done
+
+    #add first rule
+    printf "$OUTPUT: " >> makefile
+
+    for CURRENT in ${FILE[@]}; do
+        printf "$CURRENT.o " >> makefile
+    done
+    printf "\n" >> makefile
+
+    #add command for first rule
+    printf "\t g++ -Wall -g -o $OUTPUT " >> makefile
+    for CURRENT in ${FILE[@]}; do
+        printf "$CURRENT.o " >> makefile
+    done
+    printf " && ./$OUTPUT ${ARGUMENT[*]} | tee output.txt\n\n" >> makefile
+
+    #add clean rule
+    printf "clean:\n\trm -f *.o output.txt $OUTPUT\n\n" >> makefile
+
+    #add valgrind rule
+    printf "valgrind: $OUTPUT\n\tvalgrind -s --leak-check=full --track-origins=yes ./$OUTPUT\n\n" >> makefile
+
+    #add compile rule
+    printf "c: $OUTPUT\n\t./$OUTPUT ${ARGUMENT[*]} | tee output.txt\n\n" >> makefile
+
+    echo "#--------------------------------------------" >> makefile
+
+    #add receipe for the files passed in
+    for CURRENT in ${FILE[@]}; do
+        printf "$CURRENT.o: $CURRENT.cpp " >> makefile
+        if [[ -f "$CURRENT.h" ]]; then
+            printf "$CURRENT.h" >> makefile
+        fi
+        printf "\n\tg++ -c $CURRENT.cpp\n\n" >> makefile
+
+    done
+
+    #$EDITOR makefile
+    exit
+}
+
+function header
 {
 	echo -e "//purpose of this file:
 //Date: ${now}
@@ -196,17 +271,18 @@ function main
 	elif [ "$1" = '-c' ]; then
 		CODE='true'
 		shift 1
+    #-q flag will do nothing
 	elif [ "$1" = '-q' ]; then
 		CODE='none'
 		shift 1
-	fi
-
 	#if compile flag is passed in, then create special template for compiling a c++ program and end script
-	if [ "$1" = '-compile' ]; then
+    elif [ "$1" = '-compile' ]; then
 		shift 1
 		compile $@
-		exit 0
-
+	#if make flag is passed in, then auto generate a makefile
+	elif [ "$1" = '-make' ]; then
+		shift 1
+		autoMake $@
 	elif [ "$1" = '-debug' ]; then
 		shift 1
 		debug $@
@@ -227,7 +303,7 @@ function main
 		NAME="$1"
 	fi
 
-	echo 'what will be the format of the file? (cpp, sh, h, html, read(REAMDE.md), compile template and debug template)'
+	echo 'what will be the format of the file? (cpp, sh, h, html, read(REAMDE.md)'
 	read LANUAGE
 
 	INPUT='false'
@@ -236,13 +312,13 @@ function main
 		case "$LANUAGE" in 
 			'cpp') cpp ;;
 			'sh') bash ;;
-			'h') .h ;;
+			'h') header ;;
 			'readme') readme ;;
 			'read') readme ;;
 			'html') html ;;
 			*) echo "***$LANUAGE*** is not a supported formate, supported formats are cpp, sh, h, html and read(README.md)"
 
-			echo 'what format would you like? (cpp, sh, h, html, read(REAMDE.md) and compile template)'
+			echo 'what format would you like?'
 			read LANUAGE
 			;;
 		esac

@@ -1,6 +1,7 @@
 # template-file-creation
 
-this program creates pre determined template files in a variety of programming languages
+This program creates pre determined template files based on the programming
+language
 
 ## installation
 
@@ -20,20 +21,19 @@ And you are ready to go!!
 
 ## usage
 
-```
+```bash
 template
 ```
 
 By default, when you run the template command on it's own, it will prompt the
 user for the language, and name of the file. And creates a file with these
 comments at the top, and open the file it just created in your default editor, as well as give
-the file executable permission, where applicable.
+the file executable permission, where applicable (bash scripts).
 
 ```
 purpose of this file:
 
 Date: <current date>
-
 ---------------------------------
 ```
 
@@ -49,12 +49,6 @@ The `-compile` flag will create a file that will compile C++ files through G++
 template -compile <c++ files>
 ```
 
-Will create a C++ style header file with header guards
-
-```bash
-template .h
-```
-
 Running the command with the file name passed in will then prompt the user for
 the format of the file and create a file with that name.
 
@@ -67,3 +61,17 @@ The `-q` option will create the file and do nothing
 ```bash
 template -q
 ```
+
+The `-make` flag will auto generate a template make file with certain predefined
+rules. It takes in the files to be compiled, and auto generates rules for those
+files.
+
+```bash
+template -make <files>.cpp
+```
+
+**Note:** auto generating rules is not as robust as `cmake`, but this is
+designed to generate a template to get started.
+
+**Note:** This is option is designed to work with C++ files, and compiled
+through g++.
