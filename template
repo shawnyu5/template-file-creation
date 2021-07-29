@@ -184,7 +184,7 @@ function autoMake
     printf " && ./$OUTPUT ${ARGUMENT[*]} | tee output.txt\n\n" >> makefile
 
     #add clean rule
-    printf "clean:\n\trm -f *.o $OUTPUT\n\n" >> makefile
+    printf "clean:\n\trm -f *.o output.txt $OUTPUT\n\n" >> makefile
 
     #add valgrind rule
     printf "valgrind: $OUTPUT\n\tvalgrind -s --leak-check=full --track-origins=yes ./$OUTPUT\n\n" >> makefile
