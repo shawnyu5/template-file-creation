@@ -75,3 +75,9 @@ designed to generate a template to get started.
 
 **Note:** This is option is designed to work with C++ files, and compiled
 through g++.
+
+## TODO
+
+* Get tab competition working for the different flags passed in
+
+* Create a simple installation script
