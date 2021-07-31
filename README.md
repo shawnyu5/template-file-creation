@@ -70,8 +70,9 @@ files.
 template -make <files>.cpp
 ```
 
-**Note:** auto generating rules is not as robust as `cmake`, but this is
-designed to generate a template to get started.
+**Note:** auto generating rules is not as robust as `cmake`, it creates the
+rules based on file name arguments passed in. It does not scan the files for
+dependencies.
 
 **Note:** This is option is designed to work with C++ files, and compiled
 through g++.
