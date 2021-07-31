@@ -13,21 +13,21 @@ function bash
 
 
 
-" > "$NAME.sh"
-	chmod +x $NAME.sh
+" > "$FILE_NAME.sh"
+	chmod +x $FILE_NAME.sh
 
 	if [ "$CODE" = 'new' ]; then 
-		echo "opening $NAME.sh in new VS code window"
-		code -n $NAME.sh
+		echo "opening $FILE_NAME.sh in new VS code window"
+		code -n $FILE_NAME.sh
 
 	elif [ "$CODE" = 'true' ]; then
-		echo "opening $NAME.sh in VS code"
-		code $NAME.sh
+		echo "opening $FILE_NAME.sh in VS code"
+		code $FILE_NAME.sh
 
 	elif [ "$CODE" = 'none' ];then
-		echo "$NAME.sh created"
+		echo "$FILE_NAME.sh created"
 	else
-		$EDITOR $NAME.sh
+		$EDITOR $FILE_NAME.sh
 	fi
 	INPUT='true'
 }
@@ -50,22 +50,23 @@ int main ()
 
 }
 
-" > "$NAME.cpp"
-	#echo "file $NAME.cpp created!"
+" > "$FILE_NAME.cpp"
+	#echo "file $FILE_NAME.cpp created!"
 	if [ "$CODE" = 'new' ]; then 
-		echo "opening $NAME.cpp in new VS code window"
-		code -n $NAME.cpp
+		echo "opening $FILE_NAME.cpp in new VS code window"
+		code -n $FILE_NAME.cpp
 	elif [ "$CODE" = 'true' ]; then
-		echo "opening $NAME.cpp in VS code"
-		code $NAME.cpp
+		echo "opening $FILE_NAME.cpp in VS code"
+		code $FILE_NAME.cpp
 	elif [ "$CODE" = 'none' ];then
-		echo "$NAME.cpp created"
+		echo "$FILE_NAME.cpp created"
 	else
-		$EDITOR $NAME.cpp
+		$EDITOR $FILE_NAME.cpp
 	fi
 
 	INPUT='true'
 }
+
 function html
 {
 	echo -e "<!--purpose of this file: 
@@ -74,19 +75,19 @@ Date: ${now}
 <html>
 
 </html>
-" > "$NAME.html"
+" > "$FILE_NAME.html"
 
 
 	if [ "$CODE" = 'new' ]; then 
-		echo "opening $NAME.html in new VS code window"
-		code -n $NAME.html
+		echo "opening $FILE_NAME.html in new VS code window"
+		code -n $FILE_NAME.html
 	elif [ "$CODE" = 'true' ]; then
-		echo "opening $NAME.html in VS code"
-		code $NAME.html
+		echo "opening $FILE_NAME.html in VS code"
+		code $FILE_NAME.html
 	elif [ "$CODE" = 'none' ];then
-		echo "$NAME.html created"
+		echo "$FILE_NAME.html created"
 	else
-		$EDITOR $NAME.html
+		$EDITOR $FILE_NAME.html
 	fi
 
 	INPUT='true'
@@ -205,8 +206,8 @@ function autoMake
 
     done
 
+    INPUT='true'
     #$EDITOR makefile
-    exit
 }
 
 function header
@@ -215,8 +216,8 @@ function header
 //Date: ${now}
 //---------------------------------
 #define _CRT_SECURE_NO_WARNINGS
-#ifndef ${NAME^^}_H_
-#define ${NAME^^}_H_
+#ifndef ${FILE_NAME^^}_H_
+#define ${FILE_NAME^^}_H_
 #include <iostream>
 #include <string>
 #include <utility>
@@ -224,18 +225,18 @@ using std::cout;
 using std::endl;
 using std::string;
 
-#endif" > "$NAME.h"
+#endif" > "$FILE_NAME.h"
 
 	if [ "$CODE" = 'new' ]; then 
-		echo "opening $NAME.h in new VS code window"
-		code -n $NAME.h
+		echo "opening $FILE_NAME.h in new VS code window"
+		code -n $FILE_NAME.h
 	elif [ "$CODE" = 'true' ]; then
-		echo "opening $NAME.h in VS code"
-		code $NAME.h
+		echo "opening $FILE_NAME.h in VS code"
+		code $FILE_NAME.h
 	elif [ "$CODE" = 'none' ];then
-		echo "$NAME.h created"
+		echo "$FILE_NAME.h created"
 	else
-		$EDITOR $NAME.h
+		$EDITOR $FILE_NAME.h
 	fi
 
 	INPUT='true'
@@ -264,51 +265,83 @@ function main
 	#flag to determine if code will be opened in vs code or not
 	CODE='false'
 
-	#if -c option is passed in, it will open file in code instead of vim and discard flag
-	if [ "$1" = '-cn' ]; then
-		CODE='new';
-		shift 1
-	elif [ "$1" = '-c' ]; then
-		CODE='true'
-		shift 1
-    #-q flag will do nothing
-	elif [ "$1" = '-q' ]; then
-		CODE='none'
-		shift 1
-	#if compile flag is passed in, then create special template for compiling a c++ program and end script
-    elif [ "$1" = '-compile' ]; then
-		shift 1
-		compile $@
-	#if make flag is passed in, then auto generate a makefile
-	elif [ "$1" = '-make' ]; then
-		shift 1
-		autoMake $@
-	elif [ "$1" = '-debug' ]; then
-		shift 1
-		debug $@
-		exit 0
+    case "$1" in
+        '-cn')
+            CODE='new'
+            shift 1;;
 
-	#if read flag is passed in, it will create a README.md file and end script
-	elif [ "$1" = 'read' ] || [ "$1" = 'readme' ]; then
-		readme
-		exit 0; 
-	fi
+        #if -c option is passed in, it will open file in code instead of vim and discard flag
+        '-c')
+            CODE='true';
+            shift 1;;
 
-	#if no arguments are passed in, it will ask for input. else it
-	#will store first arguement in name variable
+            #-q flag will not open file
+        '-q')
+            CODE='none'
+            shift 1;;
+
+        '-compile')
+            shift 1
+            compile $@;;
+
+        #auto generate a make file
+        '-make')
+            shift 1
+            autoMake $@ ;;
+
+        '-debug')
+            shift 1
+            debug $@ ;;
+
+        '-readme' | '-read')
+            readme ;;
+    esac
+
+
+    #old if statement
+	##if -c option is passed in, it will open file in code instead of vim and discard flag
+	#if [ "$1" = '-cn' ]; then
+		#CODE='new';
+		#shift 1
+	#elif [ "$1" = '-c' ]; then
+		#CODE='true'
+		#shift 1
+    ##-q flag will do nothing
+	#elif [ "$1" = '-q' ]; then
+		#CODE='none'
+		#shift 1
+	##if compile flag is passed in, then create special template for compiling a c++ program and end script
+    #elif [ "$1" = '-compile' ]; then
+		#shift 1
+		#compile $@
+	##if make flag is passed in, then auto generate a makefile
+	#elif [ "$1" = '-make' ]; then
+		#shift 1
+		#autoMake $@
+	#elif [ "$1" = '-debug' ]; then
+		#shift 1
+		#debug $@
+		#exit 0
+
+	##if read flag is passed in, it will create a README.md file and end script
+	#elif [ "$1" = 'read' ] || [ "$1" = 'readme' ]; then
+		#readme
+		#exit 0;
+	#fi
+
+	#if no arguments are passed in, it will ask for input. else it will store first arguement in name variable
 	if [ "$#" -eq 0 ]; then
 		echo 'What will be the name of the file'
-		read NAME
+		read FILE_NAME
 	else
-		NAME="$1"
+		FILE_NAME="$1"
 	fi
 
 	echo 'what will be the format of the file? (cpp, sh, h, html, read(REAMDE.md)'
 	read LANUAGE
 
 	INPUT='false'
-	while [ "$INPUT" = "false" ]; do
-		
+	while [ "$INPUT" == 'false' ]; do
 		case "$LANUAGE" in 
 			'cpp') cpp ;;
 			'sh') bash ;;
