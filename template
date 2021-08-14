@@ -73,15 +73,15 @@ function html
 Date: ${now}
 --------------------------------- -->
 <!DOCTYPE html>
-    <html lang="en">
-    <head>
-    </head>
-    <body>
+<html lang="en">
+<head>
+</head>
+<body>
 
-        <script>
-        </script>
-    </body>
-    </html>
+    <script>
+    </script>
+</body>
+</html>
 " > "$FILE_NAME.html"
 
 
