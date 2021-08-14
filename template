@@ -29,7 +29,7 @@ function bash
 	else
 		$EDITOR $FILE_NAME.sh
 	fi
-	INPUT='true'
+    exit 0
 }
 
 function cpp
@@ -64,7 +64,7 @@ int main ()
 		$EDITOR $FILE_NAME.cpp
 	fi
 
-	INPUT='true'
+    exit 0
 }
 
 function html
@@ -72,9 +72,16 @@ function html
 	echo -e "<!--purpose of this file: 
 Date: ${now}
 --------------------------------- -->
-<html>
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+    </head>
+    <body>
 
-</html>
+        <script>
+        </script>
+    </body>
+    </html>
 " > "$FILE_NAME.html"
 
 
@@ -90,7 +97,7 @@ Date: ${now}
 		$EDITOR $FILE_NAME.html
 	fi
 
-	INPUT='true'
+    exit 0
 }
 
 function compile
@@ -111,7 +118,7 @@ function compile
 g++ -g -Wall -o $OUTPUT $@ && ./$OUTPUT" > "compile_$OUTPUT.sh"
 
 	chmod +x "compile_$OUTPUT.sh"
-	INPUT='true'
+    exit 0
 }
 
 
@@ -132,7 +139,7 @@ function debug
 g++ -g -o $OUTPUT $@ && valgrind -s --leak-check=full --show-leak-kinds=all ./$OUTPUT" > "debug_$OUTPUT.sh"
 
 	chmod +x "debug_$OUTPUT.sh"
-	INPUT='true'
+    exit 0
 }
 
 function autoMake
@@ -206,7 +213,7 @@ function autoMake
 
     done
 
-    INPUT='true'
+    exit 0
     #$EDITOR makefile
 }
 
@@ -239,7 +246,7 @@ using std::string;
 		$EDITOR $FILE_NAME.h
 	fi
 
-	INPUT='true'
+    exit 0
 }
 
 function readme
@@ -257,7 +264,7 @@ function readme
 		$EDITOR README.md
 	fi
 
-	INPUT='true'
+    exit 0
 }
 
 function main
@@ -287,7 +294,8 @@ function main
         #auto generate a make file
         '-make')
             shift 1
-            autoMake $@ ;;
+            autoMake $@
+            ;;
 
         '-debug')
             shift 1
@@ -340,7 +348,9 @@ function main
 	echo 'what will be the format of the file? (cpp, sh, h, html, read(REAMDE.md)'
 	read LANUAGE
 
+    #flag to determine if input is valid
 	INPUT='false'
+
 	while [ "$INPUT" == 'false' ]; do
 		case "$LANUAGE" in 
 			'cpp') cpp ;;
