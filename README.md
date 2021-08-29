@@ -76,3 +76,11 @@ dependencies.
 
 **Note:** This is option is designed to work with C++ files, and compiled
 through g++.
+
+## TO-DO
+
+Tab completion
+
+  * For bash
+
+  * Zsh - A simple basic completion script is written.
