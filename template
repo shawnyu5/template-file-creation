@@ -3,6 +3,35 @@
 var=`date +"%FORMAT_STRING"`
 now=`date +"%m_%d_%Y"`
 now=`date +"%Y-%m-%d"`
+
+function python
+{
+    echo -e "#purpose of this file:
+#Date: ${now}
+#---------------------------------
+
+def main:
+
+
+if "__name__" == "__main__":
+    main()
+" > $FILE_NAME.py
+
+	if [ "$CODE" = 'new' ]; then
+		echo "opening $FILE_NAME.py in new VS code window"
+		code -n $FILE_NAME.py
+	elif [ "$CODE" = 'true' ]; then
+		echo "opening $FILE_NAME.py in VS code"
+		code $FILE_NAME.py
+	elif [ "$CODE" = 'none' ];then
+		echo "$FILE_NAME.py created"
+	else
+		$EDITOR $FILE_NAME.py
+	fi
+
+    exit 0
+}
+
 function bash 
 {
 	echo -e "#!/bin/bash
@@ -345,7 +374,7 @@ function main
 		FILE_NAME="$1"
 	fi
 
-	echo 'what will be the format of the file? (cpp, sh, h, html, read(REAMDE.md)'
+	echo 'what will be the format of the file? (cpp, sh, h, html, py, read(REAMDE.md)'
 	read LANUAGE
 
     #flag to determine if input is valid
@@ -359,7 +388,8 @@ function main
 			'readme') readme ;;
 			'read') readme ;;
 			'html') html ;;
-			*) echo "***$LANUAGE*** is not a supported formate, supported formats are cpp, sh, h, html and read(README.md)"
+            'py') python ;;
+			*) echo "***$LANUAGE*** is not a supported formate, supported formats are cpp, sh, h, html, py and read(README.md)"
 
 			echo 'what format would you like?'
 			read LANUAGE
