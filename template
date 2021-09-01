@@ -10,10 +10,10 @@ function python
 #Date: ${now}
 #---------------------------------
 
-def main:
+def main():
 
 
-if "__name__" == "__main__":
+if \"__name__\" == \"__main__\":
     main()
 " > $FILE_NAME.py
 
