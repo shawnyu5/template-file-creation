@@ -6,7 +6,8 @@ now=`date +"%Y-%m-%d"`
 
 function python
 {
-    echo -e "#purpose of this file:
+    echo -e "#!/usr/bin/env python3
+#purpose of this file:
 #Date: ${now}
 #---------------------------------
 
