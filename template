@@ -6,10 +6,10 @@ now=`date +"%Y-%m-%d"`
 
 function python
 {
-    echo -e "#!/usr/bin/env python3
-#purpose of this file:
-#Date: ${now}
-#---------------------------------
+    echo -e "# !/usr/bin/env python3
+# purpose of this file:
+# Date: ${now}
+# ---------------------------------
 
 def main():
 
@@ -35,10 +35,10 @@ if __name__ == \"__main__\":
 
 function bash 
 {
-	echo -e "#!/bin/bash
-#purpose of this file: 
-#Date: ${now}
-#---------------------------------
+	echo -e "# !/bin/bash
+# purpose of this file:
+# Date: ${now}
+# ---------------------------------
 
 
 
@@ -64,9 +64,9 @@ function bash
 
 function cpp
 {
-	echo -e "//purpose of this file: 
-//Date: ${now}
-//---------------------------------
+	echo -e "// purpose of this file:
+// Date: ${now}
+// ---------------------------------
 #include <iostream>
 #include <string>
 #include <utility>
@@ -142,9 +142,9 @@ function compile
 	echo 'what will be the output file name'
 	read OUTPUT
 
-	echo -e "#purpose of the file: to compile $OUTPUT
-#date: ${now}
-#-------------------------------------------------
+	echo -e "# purpose of the file: to compile $OUTPUT
+# date: ${now}
+# -------------------------------------------------
 g++ -g -Wall -o $OUTPUT $@ && ./$OUTPUT" > "compile_$OUTPUT.sh"
 
 	chmod +x "compile_$OUTPUT.sh"
@@ -163,9 +163,9 @@ function debug
 	echo 'what will be the output file name'
 	read OUTPUT
 
-	echo -e "#purpose of the file: to debug $OUTPUT
-#date: ${now}
-#-------------------------------------------------
+	echo -e "# purpose of the file: to debug $OUTPUT
+# date: ${now}
+# -------------------------------------------------
 g++ -g -o $OUTPUT $@ && valgrind -s --leak-check=full --show-leak-kinds=all ./$OUTPUT" > "debug_$OUTPUT.sh"
 
 	chmod +x "debug_$OUTPUT.sh"
